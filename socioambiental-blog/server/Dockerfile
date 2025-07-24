@@ -1,34 +1,31 @@
-# Use official OpenJDK 17 image
+# Build stage (JDK)
 FROM eclipse-temurin:17-jdk-jammy as builder
-
-# Set working directory
 WORKDIR /app
 
-# Copy only the necessary files for build (faster than copying everything)
-COPY socioambiental-blog/server/pom.xml .
-COPY socioambiental-blog/server/mvnw .
-COPY socioambiental-blog/server/.mvn .mvn
+# Copia os arquivos do Maven primeiro (para otimizar cache)
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
 
-# Download dependencies (cached unless pom.xml changes)
+# Baixa dependências (cacheado se o pom.xml não mudar)
 RUN ./mvnw dependency:go-offline -B
 
-# Copy source files
-COPY socioambiental-blog/server/src src
+# Copia o código fonte
+COPY src src
 
-# Build the application (creates JAR in target/)
+# Compila o projeto
 RUN ./mvnw clean package -DskipTests
 
-# Runtime stage (smaller image)
+# Runtime stage (JRE - imagem menor)
 FROM eclipse-temurin:17-jre-jammy
-
 WORKDIR /app
 
-# Copy JAR from builder stage
+# Copia o .jar do estágio de build
 COPY --from=builder /app/target/*.jar app.jar
 
-# Set environment variables
+# Configura porta para o Render
 ENV PORT=8080
 EXPOSE $PORT
 
-# Run the application
+# Comando de execução
 CMD ["java", "-jar", "app.jar"]
