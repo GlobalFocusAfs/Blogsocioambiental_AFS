@@ -2,19 +2,18 @@
 FROM eclipse-temurin:17-jdk-jammy as builder
 WORKDIR /app
 
-# Copia os arquivos do Maven primeiro (para otimizar cache)
+# Copia os arquivos necessários para o build
 COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
-# Baixa dependências (cacheado se o pom.xml não mudar)
-RUN ./mvnw dependency:go-offline -B
+# Configura permissões e baixa dependências
+RUN chmod +x mvnw && \
+    ./mvnw dependency:go-offline -B
 
-# Copia o código fonte
+# Copia o código fonte e faz o build
 COPY src src
-
-# Compila o projeto
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package -DskipTests -T 1C
 
 # Runtime stage (JRE - imagem menor)
 FROM eclipse-temurin:17-jre-jammy
@@ -23,9 +22,9 @@ WORKDIR /app
 # Copia o .jar do estágio de build
 COPY --from=builder /app/target/*.jar app.jar
 
-# Configura porta para o Render
+# Configurações para o Render
 ENV PORT=8080
 EXPOSE $PORT
 
 # Comando de execução
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
