@@ -1,0 +1,63 @@
+# Node.js (React client)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+/build
+/dist
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Java (Spring Boot server)
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+
+# Maven
+.mvn/
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/MavenWrapperDownloader.java
+
+# Eclipse, IntelliJ IDEA, VSCode
+.project
+.classpath
+.settings/
+.idea/
+*.iws
+*.ipr
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Uploads folders (user uploaded files)
+uploads/
+socioambiental-blog/server/uploads/
+
+# Others
+*.bak
+*.tmp
+*.swp
+*.swo
