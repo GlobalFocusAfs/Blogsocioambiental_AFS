@@ -11,6 +11,12 @@ const PostDetail = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [comments, setComments] = useState([]);
+  const [commentAuthor, setCommentAuthor] = useState('');
+  const [commentContent, setCommentContent] = useState('');
+  const [commentError, setCommentError] = useState(null);
+  const [commentSubmitting, setCommentSubmitting] = useState(false);
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -26,6 +32,45 @@ const PostDetail = () => {
     };
     fetchPost();
   }, [id]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/posts/${id}/comments`);
+        setComments(response.data);
+      } catch (err) {
+        console.error('Erro ao carregar comentários:', err);
+      }
+    };
+    fetchComments();
+  }, [id]);
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    setCommentError(null);
+
+    if (!commentContent.trim()) {
+      setCommentError('O conteúdo do comentário é obrigatório.');
+      return;
+    }
+
+    setCommentSubmitting(true);
+    try {
+      await axios.post(`http://localhost:8080/api/posts/${id}/comments`, {
+        author: commentAuthor.trim() || 'Anônimo',
+        content: commentContent.trim(),
+      });
+      setCommentAuthor('');
+      setCommentContent('');
+      // Refresh comments
+      const response = await axios.get(`http://localhost:8080/api/posts/${id}/comments`);
+      setComments(response.data);
+    } catch (err) {
+      setCommentError('Erro ao enviar comentário. Tente novamente.');
+    } finally {
+      setCommentSubmitting(false);
+    }
+  };
 
   if (loading) {
     return <div className="loading">Carregando publicação...</div>;
@@ -61,6 +106,7 @@ const PostDetail = () => {
         />
       )}
       <p style={{ fontSize: '1.2rem', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{post.content}</p>
+
       <button
         onClick={() => {
           const password = window.prompt('Digite a senha para editar a publicação:');
@@ -112,6 +158,69 @@ const PostDetail = () => {
       >
         Excluir
       </button>
+
+      {/* Comments Section */}
+      <div className="comments-section" style={{ marginTop: '40px' }}>
+        <h2 style={{ fontFamily: 'Georgia, serif', fontWeight: '700', fontSize: '2rem', marginBottom: '20px' }}>Comentários</h2>
+        {comments.length === 0 ? (
+          <p style={{ fontStyle: 'italic', color: '#666' }}>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+        ) : (
+          comments.map((comment) => (
+            <div key={comment.id} className="comment" style={{ marginBottom: '20px', paddingBottom: '15px', borderBottom: '1px solid #ccc' }}>
+              <p style={{ margin: '0 0 5px 0', fontWeight: '700', color: '#2e7d32' }}>{comment.author || 'Anônimo'}</p>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{comment.content}</p>
+              <p style={{ fontSize: '0.8rem', color: '#999', marginTop: '5px' }}>
+                {format(new Date(comment.createdAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+              </p>
+            </div>
+          ))
+        )}
+
+        {/* Add Comment Form */}
+        <form onSubmit={handleCommentSubmit} style={{ marginTop: '30px' }}>
+          {commentError && <p style={{ color: 'red', marginBottom: '10px' }}>{commentError}</p>}
+          <div style={{ marginBottom: '10px' }}>
+            <label htmlFor="commentAuthor" style={{ display: 'block', fontWeight: '700', marginBottom: '5px' }}>Nome (opcional)</label>
+            <input
+              id="commentAuthor"
+              type="text"
+              value={commentAuthor}
+              onChange={(e) => setCommentAuthor(e.target.value)}
+              placeholder="Seu nome ou Anônimo"
+              style={{ width: '100%', padding: '8px', fontSize: '1rem', borderRadius: '4px', border: '1px solid #ccc' }}
+              disabled={commentSubmitting}
+            />
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <label htmlFor="commentContent" style={{ display: 'block', fontWeight: '700', marginBottom: '5px' }}>Comentário</label>
+            <textarea
+              id="commentContent"
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
+              placeholder="Escreva seu comentário aqui..."
+              rows={4}
+              style={{ width: '100%', padding: '8px', fontSize: '1rem', borderRadius: '4px', border: '1px solid #ccc' }}
+              disabled={commentSubmitting}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={commentSubmitting}
+            style={{
+              backgroundColor: '#4caf50',
+              color: 'white',
+              padding: '10px 20px',
+              fontSize: '1rem',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            {commentSubmitting ? 'Enviando...' : 'Enviar Comentário'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

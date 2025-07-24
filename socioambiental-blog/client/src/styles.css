@@ -638,13 +638,6 @@ header.app-header p {
   text-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
-.post-meta {
-  color: #7f8c8d;
-  font-size: 1rem;
-  margin-bottom: 18px;
-  font-style: italic;
-}
-
 /* Pequenos elementos visuais decorativos nos posts */
 .post-content::before {
   content: "🌱";
@@ -798,5 +791,93 @@ header.app-header p {
   .submit-button {
     width: 100%;
     margin-bottom: 15px;
+  }
+}
+
+/* Comments Section */
+.comments-section {
+  margin-top: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Georgia', serif;
+}
+
+.comments-section h2 {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #1b5e20;
+}
+
+.comment {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.comment p {
+  margin: 0;
+}
+
+.comment p:first-child {
+  font-weight: 700;
+  color: #2e7d32;
+  margin-bottom: 5px;
+}
+
+.comment p:last-child {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Comment form */
+.comments-section form {
+  margin-top: 30px;
+}
+
+.comments-section form label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #2e7d32;
+}
+
+.comments-section form input,
+.comments-section form textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  font-family: 'Georgia', serif;
+}
+
+.comments-section form button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comments-section form button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .post-detail-container {
+    padding: 15px 10px;
+    margin: 20px auto;
+  }
+
+  .comments-section {
+    padding: 0 10px;
   }
 }
