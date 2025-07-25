@@ -27,6 +27,10 @@ RUN apt-get update && \
     apt-get install -y ca-certificates && \
     update-ca-certificates
 
+# Define timezone para evitar problemas de SSL
+ENV TZ=America/Sao_Paulo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Copia apenas o .jar do estágio de build
 COPY --from=builder /app/target/*.jar app.jar
 
