@@ -54,14 +54,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>
 
-    <!-- Explicit MongoDB driver dependency to ensure latest version -->
-    <dependency>
-        <groupId>org.mongodb</groupId>
-        <artifactId>mongodb-driver-sync</artifactId>
-        <version>4.9.0</version>
-    </dependency>
+        <!-- Explicit MongoDB driver dependency to ensure latest version -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.9.0</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
