@@ -22,7 +22,7 @@ public class MongoConfig {
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToSslSettings(builder -> {
                     builder.enabled(true);
-                    builder.invalidHostNameAllowed(false); // Set to true only for development
+                    builder.invalidHostNameAllowed(true); // Align with application.properties
                     builder.context(getSSLContext());
                 })
                 .applyToClusterSettings(builder ->
@@ -34,9 +34,12 @@ public class MongoConfig {
 
     private SSLContext getSSLContext() {
         try {
-            return SSLContext.getDefault();
+            // Explicitly use TLSv1.2 protocol for SSLContext
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            sslContext.init(null, null, null);
+            return sslContext;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get default SSLContext", e);
+            throw new RuntimeException("Failed to get TLSv1.2 SSLContext", e);
         }
     }
 
