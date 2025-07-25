@@ -56,6 +56,13 @@
         </dependency>
     </dependencies>
 
+    <!-- Explicit MongoDB driver dependency to ensure latest version -->
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-sync</artifactId>
+        <version>4.9.0</version>
+    </dependency>
+
     <build>
         <plugins>
             <plugin>

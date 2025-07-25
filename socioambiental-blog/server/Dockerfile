@@ -22,6 +22,11 @@ RUN mvn clean package -DskipTests -T 1C
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
+# Instala certificados CA
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
+    update-ca-certificates
+
 # Copia apenas o .jar do estágio de build
 COPY --from=builder /app/target/*.jar app.jar
 
