@@ -26,7 +26,7 @@ COPY --from=builder /app/target/*.jar app.jar
 # Variáveis de ambiente críticas
 ENV PORT=8080 \
     TZ=America/Sao_Paulo \
-    JAVA_OPTS="-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStorePassword=changeit"
+    JAVA_OPTS="-Djdk.tls.client.protocols=TLSv1.2 -Djavax.net.debug=ssl"
 
 EXPOSE $PORT
 CMD ["java", "-jar", "app.jar"]
