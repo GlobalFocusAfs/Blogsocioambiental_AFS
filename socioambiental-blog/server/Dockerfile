@@ -34,4 +34,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:$PORT/actuator/health || exit 1
 
 # Comando de execução
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dhttps.protocols=TLSv1.2", "-Djdk.tls.client.protocols=TLSv1.2", "-jar", "app.jar"]
