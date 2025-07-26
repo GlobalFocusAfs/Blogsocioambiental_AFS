@@ -3,7 +3,7 @@ FROM eclipse-temurin:17-jdk-jammy as builder
 
 # Instala certificados root atualizados e libssl1.1
 RUN apt-get update && \
-    apt-get install -y maven ca-certificates libssl1.1 tzdata && \
+    apt-get install -y maven ca-certificates libssl3 tzdata && \
     update-ca-certificates && \
     ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 
@@ -16,7 +16,7 @@ FROM eclipse-temurin:17-jre-jammy
 
 # Configura certificados, libssl1.1 e timezone
 RUN apt-get update && \
-    apt-get install -y ca-certificates libssl1.1 tzdata && \
+    apt-get install -y ca-certificates libssl3 tzdata && \
     update-ca-certificates && \
     mkdir -p /etc/ssl/certs/java && \
     cp /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/java/cacerts && \
