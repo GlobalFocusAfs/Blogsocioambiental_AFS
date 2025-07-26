@@ -55,12 +55,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Explicit MongoDB driver dependency to ensure latest version -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.6.0</version>
-        </dependency>
     </dependencies>
 
     <build>
