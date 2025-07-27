@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-jammy as builder
+FROM eclipse-temurin:11-jdk-jammy as builder
 
 # Instala dependências SSL
 RUN apt-get update && \
@@ -15,7 +15,7 @@ RUN chmod +x mvnw
 # Executa o build
 RUN ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:11-jre-jammy
 
 # Configuração SSL/TLS simplificada e funcional
 RUN apt-get update && \
