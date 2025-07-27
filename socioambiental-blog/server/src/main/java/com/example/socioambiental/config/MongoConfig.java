@@ -16,14 +16,18 @@ public class MongoConfig {
 
     @Bean
     public MongoClient mongoClient() {
-        String connectionString = "mongodb+srv://usuarioBlog:usuarioBlog@cluster0.bqekblt.mongodb.net/socioambiental-blog?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true";
+        String connectionString = "mongodb+srv://usuarioBlog:usuarioBlog@cluster0.bqekblt.mongodb.net/socioambiental-blog?retryWrites=true&w=majority";
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToSslSettings(builder -> {
                     builder.enabled(true);
                     builder.invalidHostNameAllowed(true); // Align with application.properties
-                    // Use default SSLContext instead of forcing TLSv1.2
+                    try {
+                        builder.context(SSLContext.getInstance("TLSv1.3"));
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to set SSLContext to TLSv1.3", e);
+                    }
                 })
                 .applyToClusterSettings(builder ->
                         builder.serverSelectionTimeout(30, TimeUnit.SECONDS))
