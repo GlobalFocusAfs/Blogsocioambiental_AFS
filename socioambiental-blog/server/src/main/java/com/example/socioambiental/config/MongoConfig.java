@@ -16,7 +16,8 @@ public class MongoConfig {
 
     @Bean
     public MongoClient mongoClient() {
-        String connectionString = "mongodb+srv://usuarioBlog:usuarioBlog@cluster0.bqekblt.mongodb.net/socioambiental-blog?retryWrites=true&w=majority&ssl=true&tls=true&tlsAllowInvalidCertificates=true";
+        // Removed ssl=true and tls=true from connection string to avoid redundancy
+        String connectionString = "mongodb+srv://usuarioBlog:usuarioBlog@cluster0.bqekblt.mongodb.net/socioambiental-blog?retryWrites=true&w=majority&tlsAllowInvalidCertificates=true";
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
@@ -34,11 +35,12 @@ public class MongoConfig {
 
     private SSLContext getSSLContext() {
         try {
-            // Use default SSLContext instead of forcing TLSv1.2
-            SSLContext sslContext = SSLContext.getDefault();
+            // Explicitly set SSLContext to TLSv1.2 for compatibility
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            sslContext.init(null, null, null);
             return sslContext;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get default SSLContext", e);
+            throw new RuntimeException("Failed to get TLSv1.2 SSLContext", e);
         }
     }
 
