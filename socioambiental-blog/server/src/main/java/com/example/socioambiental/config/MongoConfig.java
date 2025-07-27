@@ -24,9 +24,17 @@ public class MongoConfig {
                     builder.enabled(true);
                     builder.invalidHostNameAllowed(false); // Enforce hostname verification
                     try {
-                        builder.context(SSLContext.getInstance("TLSv1.2"));
+                        SSLContext sslContext = SSLContext.getInstance("TLS");
+                        sslContext.init(null, null, new java.security.SecureRandom());
+                        builder.context(sslContext);
                     } catch (Exception e) {
-                        throw new RuntimeException("Failed to set TLSv1.2 SSLContext", e);
+                        // Fallback to default SSLContext if initialization fails
+                        try {
+                            SSLContext defaultContext = SSLContext.getDefault();
+                            builder.context(defaultContext);
+                        } catch (Exception ex) {
+                            throw new RuntimeException("Failed to set SSLContext", ex);
+                        }
                     }
                 })
                 .applyToClusterSettings(builder ->
