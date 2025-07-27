@@ -22,11 +22,11 @@ public class MongoConfig {
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToSslSettings(builder -> {
                     builder.enabled(true);
-                    builder.invalidHostNameAllowed(true); // Align with application.properties
+                    builder.invalidHostNameAllowed(false); // Enforce hostname verification
                     try {
-                        builder.context(SSLContext.getDefault());
+                        builder.context(SSLContext.getInstance("TLSv1.2"));
                     } catch (Exception e) {
-                        throw new RuntimeException("Failed to set default SSLContext", e);
+                        throw new RuntimeException("Failed to set TLSv1.2 SSLContext", e);
                     }
                 })
                 .applyToClusterSettings(builder ->
