@@ -16,7 +16,7 @@ public class MongoConfig {
 
     @Bean
     public MongoClient mongoClient() {
-        String connectionString = "mongodb+srv://usuarioBlog:usuarioBlog@cluster0.bqekblt.mongodb.net/socioambiental-blog?retryWrites=true&w=majority&ssl=true&tlsInsecure=true";
+        String connectionString = "mongodb+srv://usuarioBlog:usuarioBlog@cluster0.bqekblt.mongodb.net/socioambiental-blog?retryWrites=true&w=majority&ssl=true&tls=true&tlsAllowInvalidCertificates=true";
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
