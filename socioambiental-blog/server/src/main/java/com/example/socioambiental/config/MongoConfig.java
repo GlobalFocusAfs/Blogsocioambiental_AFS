@@ -34,12 +34,11 @@ public class MongoConfig {
 
     private SSLContext getSSLContext() {
         try {
-            // Explicitly use TLSv1.2 protocol for SSLContext
-            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, null, null);
+            // Use default SSLContext instead of forcing TLSv1.2
+            SSLContext sslContext = SSLContext.getDefault();
             return sslContext;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get TLSv1.2 SSLContext", e);
+            throw new RuntimeException("Failed to get default SSLContext", e);
         }
     }
 
