@@ -24,9 +24,9 @@ public class MongoConfig {
                     builder.enabled(true);
                     builder.invalidHostNameAllowed(true); // Align with application.properties
                     try {
-                        builder.context(SSLContext.getInstance("TLSv1.3"));
+                        builder.context(SSLContext.getDefault());
                     } catch (Exception e) {
-                        throw new RuntimeException("Failed to set SSLContext to TLSv1.3", e);
+                        throw new RuntimeException("Failed to set default SSLContext", e);
                     }
                 })
                 .applyToClusterSettings(builder ->
