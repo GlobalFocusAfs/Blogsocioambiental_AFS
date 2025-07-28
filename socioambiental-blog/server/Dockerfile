@@ -10,7 +10,7 @@ WORKDIR /app
 COPY . .
 
 # Build da aplicação
-RUN ./mvnw clean package -DskipTests
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 # Configuração SSL explícita
 ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/etc/ssl/certs/ca-certificates.crt \
