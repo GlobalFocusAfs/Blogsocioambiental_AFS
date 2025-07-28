@@ -23,10 +23,6 @@ public class MongoConfig {
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToClusterSettings(builder ->
                         builder.serverSelectionTimeout(30, TimeUnit.SECONDS))
-                .applyToSslSettings(sslBuilder -> {
-                    sslBuilder.enabled(true);
-                    sslBuilder.invalidHostNameAllowed(false);
-                })
                 .build();
 
         return MongoClients.create(settings);
