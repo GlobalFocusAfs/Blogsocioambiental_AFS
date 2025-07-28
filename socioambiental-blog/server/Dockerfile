@@ -24,10 +24,7 @@ RUN apt-get update && \
 
 # Define variáveis de ambiente essenciais
 ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts \
-               -Djavax.net.ssl.trustStorePassword=changeit \
-               -Djdk.tls.client.protocols=TLSv1.2 \
-               -Dhttps.protocols=TLSv1.2 \
-               -Djavax.net.debug=ssl:handshake"
+               -Djavax.net.ssl.trustStorePassword=changeit"
 
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
