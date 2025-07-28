@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000", "https://nova-pasta-csoxecmvk-globalfocusafs-projects.vercel.app", "https://nova-pasta-xi.vercel.app")
+                        .allowedOrigins("http://localhost:3000", "https://nova-pasta-csoxecmvk-globalfocusafs-projects.vercel.app", "https://nova-pasta-xi.vercel.app", "https://nova-pasta-xi.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

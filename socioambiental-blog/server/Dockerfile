@@ -11,7 +11,11 @@ ENV SSL_CERT_DIR=/etc/ssl/certs
 
 WORKDIR /app
 COPY . .
-RUN chmod +x mvnw && ./mvnw clean package -DskipTests
+RUN cat /app/pom.xml
+RUN chmod +x /app/mvnw
+RUN ls -l /app/mvnw
+RUN ./mvnw clean package -DskipTests
+
 
 FROM eclipse-temurin:21-jre
 
