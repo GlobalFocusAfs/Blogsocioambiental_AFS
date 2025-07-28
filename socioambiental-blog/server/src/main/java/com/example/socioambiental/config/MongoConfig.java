@@ -22,9 +22,9 @@ public class MongoConfig {
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToSslSettings(builder -> {
                     builder.enabled(true);
-                    builder.invalidHostNameAllowed(false); // Enforce hostname verification
+                    builder.invalidHostNameAllowed(true); // Temporarily disable hostname verification for testing
                     try {
-                        SSLContext sslContext = SSLContext.getInstance("TLS");
+                        SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
                         sslContext.init(null, null, new java.security.SecureRandom());
                         builder.context(sslContext);
                     } catch (Exception e) {
