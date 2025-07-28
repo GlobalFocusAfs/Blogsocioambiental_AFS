@@ -1,47 +1,21 @@
-FROM eclipse-temurin:11-jdk-jammy as builder
+FROM eclipse-temurin:17-jdk-jammy
 
-# Instala dependências SSL
+# Configuração de timezone e certificados
 RUN apt-get update && \
-    apt-get install -y ca-certificates openssl && \
-    update-ca-certificates --fresh && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y tzdata ca-certificates && \
+    ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && \
+    update-ca-certificates
 
 WORKDIR /app
 COPY . .
 
-# Dá permissão de execução ao mvnw
-RUN chmod +x mvnw
-
-# Executa o build
+# Build da aplicação
 RUN ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:11-jre-jammy
-
-# Configuração SSL/TLS simplificada e funcional
-RUN apt-get update && \
-    apt-get install -y ca-certificates openssl && \
-    update-ca-certificates --fresh && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /etc/ssl/certs/java && \
-    /usr/bin/printf '\xfe\xed\xfe\xed\x00\x00\x00\x02\x00\x00\x00\x00\xe2\x68\x6e\x45\xfb\x43\xdf\xa4\xd9\x92\xdd\x41\xce\xb6\xb2\x1c\x63\x30\xd7\x92' > /etc/ssl/certs/java/cacerts && \
-    chmod 644 /etc/ssl/certs/java/cacerts && \
-    for cert in $(ls /usr/share/ca-certificates/*/*.crt); do \
-      alias=$(basename $cert .crt); \
-      keytool -importcert \
-        -alias "$alias" \
-        -keystore /etc/ssl/certs/java/cacerts \
-        -storepass changeit \
-        -noprompt \
-        -file "$cert" || true; \
-    done
-
-WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-
-# Variáveis de ambiente para SSL
-ENV JAVA_OPTS="-Djdk.tls.client.protocols=TLSv1.2 \
-               -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts \
-               -Djavax.net.ssl.trustStorePassword=changeit"
+# Configuração SSL explícita
+ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/etc/ssl/certs/ca-certificates.crt \
+               -Djdk.tls.client.protocols=TLSv1.2 \
+               -Dhttps.protocols=TLSv1.2"
 
 EXPOSE 8080
-CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+CMD ["java", "-jar", "target/*.jar"]
