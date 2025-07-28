@@ -1,4 +1,5 @@
 FROM eclipse-temurin:17-jdk as builder
+WORKDIR /app
 
 # 1. Copia primeiro os arquivos essenciais do Maven Wrapper
 COPY mvnw .
