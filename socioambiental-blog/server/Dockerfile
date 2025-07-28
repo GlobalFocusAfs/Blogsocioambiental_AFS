@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk as builder
+FROM eclipse-temurin:21-jdk as builder
 
 # Atualiza certificados e instala componentes SSL
 RUN apt-get update && \
@@ -13,7 +13,7 @@ WORKDIR /app
 COPY . .
 RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 
 # Configuração SSL crítica
 RUN apt-get update && \
