@@ -56,7 +56,12 @@
             <scope>test</scope>
         </dependency>
 
-    </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.9.0</version>
+        </dependency>
 
     <build>
         <plugins>
