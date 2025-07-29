@@ -1,14 +1,14 @@
 FROM eclipse-temurin:17-jdk-jammy as builder
 
 WORKDIR /app
-RUN apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
+COPY mvnw .
+COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
+RUN chmod +x ./mvnw
 ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 ENV MAVEN_CLI_OPTS="--batch-mode --errors --fail-at-end --show-version"
-RUN mvn clean package -DskipTests -T 1C
+RUN ./mvnw clean package -DskipTests -T 1C
 
 FROM eclipse-temurin:17-jre-jammy
 
