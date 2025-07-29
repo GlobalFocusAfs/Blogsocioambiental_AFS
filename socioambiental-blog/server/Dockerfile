@@ -23,4 +23,4 @@ ENV PORT=8080
 EXPOSE $PORT
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:$PORT/actuator/health || exit 1
-CMD ["mvn", "spring-boot:run"]
+CMD ["java", "-jar", "app.jar"]
