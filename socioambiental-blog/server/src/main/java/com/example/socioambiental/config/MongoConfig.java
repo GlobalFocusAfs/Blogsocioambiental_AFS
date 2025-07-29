@@ -17,14 +17,28 @@ public class MongoConfig {
     @Value("${spring.data.mongodb.uri}")
     private String connectionString;
 
+    @Value("${spring.data.mongodb.ssl.enabled:false}")
+    private boolean sslEnabled;
+
+    @Value("${spring.data.mongodb.ssl.invalid-host-name-allowed:false}")
+    private boolean invalidHostNameAllowed;
+
     @Bean
     public MongoClient mongoClient() {
-        MongoClientSettings settings = MongoClientSettings.builder()
+        MongoClientSettings.Builder builder = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
-                .applyToClusterSettings(builder ->
-                        builder.serverSelectionTimeout(30, TimeUnit.SECONDS))
-                .applyToSslSettings(sslBuilder -> sslBuilder.enabled(true))
-                .build();
+                .applyToClusterSettings(clusterBuilder ->
+                        clusterBuilder.serverSelectionTimeout(30, TimeUnit.SECONDS));
+
+        if (sslEnabled) {
+            builder.applyToSslSettings(sslBuilder ->
+                    sslBuilder.enabled(true)
+                              .invalidHostNameAllowed(invalidHostNameAllowed));
+        } else {
+            builder.applyToSslSettings(sslBuilder -> sslBuilder.enabled(false));
+        }
+
+        MongoClientSettings settings = builder.build();
 
         return MongoClients.create(settings);
     }
