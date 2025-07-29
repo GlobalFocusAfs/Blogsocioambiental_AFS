@@ -24,7 +24,7 @@ public class PostController {
             return ResponseEntity.ok(postRepository.findAllByOrderByCreatedAtDesc());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar publicações");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar publicações: " + e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class PostController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar publicação");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar publicação: " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class PostController {
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar publicação");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar publicação: " + e.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class PostController {
             return ResponseEntity.ok(updatedPost);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar publicação");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar publicação: " + e.getMessage());
         }
     }
 
@@ -91,7 +91,7 @@ public class PostController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar publicação");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar publicação: " + e.getMessage());
         }
     }
 }
