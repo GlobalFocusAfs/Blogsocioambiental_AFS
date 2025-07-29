@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.concurrent.TimeUnit;
+import javax.net.ssl.SSLContext;
 
 @Configuration
 public class MongoConfig {
@@ -17,25 +18,23 @@ public class MongoConfig {
     @Value("${spring.data.mongodb.uri}")
     private String connectionString;
 
-    @Value("${spring.data.mongodb.ssl.enabled:false}")
-    private boolean sslEnabled;
-
-    @Value("${spring.data.mongodb.ssl.invalid-host-name-allowed:false}")
-    private boolean invalidHostNameAllowed;
-
     @Bean
     public MongoClient mongoClient() {
         MongoClientSettings.Builder builder = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToClusterSettings(clusterBuilder ->
-                        clusterBuilder.serverSelectionTimeout(30, TimeUnit.SECONDS));
+                        clusterBuilder.serverSelectionTimeout(30, TimeUnit.SECONDS))
+                .applyToSslSettings(sslBuilder -> sslBuilder.enabled(true).invalidHostNameAllowed(true))
+                .applyToSocketSettings(socketBuilder -> socketBuilder.connectTimeout(30, TimeUnit.SECONDS))
+                .applyToConnectionPoolSettings(poolBuilder -> poolBuilder.maxWaitTime(30, TimeUnit.SECONDS));
 
-        if (sslEnabled) {
-            builder.applyToSslSettings(sslBuilder ->
-                    sslBuilder.enabled(true)
-                              .invalidHostNameAllowed(invalidHostNameAllowed));
-        } else {
-            builder.applyToSslSettings(sslBuilder -> sslBuilder.enabled(false));
+        // Forçar uso do TLS 1.2
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            sslContext.init(null, null, null);
+            builder.applyToSslSettings(sslBuilder -> sslBuilder.context(sslContext));
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao configurar SSLContext para TLSv1.2", e);
         }
 
         MongoClientSettings settings = builder.build();
