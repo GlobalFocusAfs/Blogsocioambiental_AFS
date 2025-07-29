@@ -15,6 +15,10 @@ public class MongoConnectionVerifier {
 
     @PostConstruct
     public void verifyConnection() {
+        System.out.println("Java Runtime Version: " + System.getProperty("java.version"));
+        System.out.println("Java Runtime Vendor: " + System.getProperty("java.vendor"));
+        System.out.println("Java Runtime Name: " + System.getProperty("java.runtime.name"));
+        System.out.println("Java TLS Protocols: " + System.getProperty("https.protocols"));
         int maxRetries = 3;
         int retryCount = 0;
         while (retryCount < maxRetries) {

@@ -19,7 +19,7 @@ function App() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:8080/api/posts');
+      const response = await axios.get('https://nova-pasta-actz.onrender.com/api/posts');
       // O backend já retorna os posts ordenados, então não precisa ordenar no frontend
       setPosts(response.data);
       setError(null);
@@ -33,7 +33,7 @@ function App() {
 
   const handleNewPost = async (post) => {
     try {
-      await axios.post('http://localhost:8080/api/posts', post);
+      await axios.post('https://nova-pasta-actz.onrender.com/api/posts', post);
       fetchPosts(); // Atualiza a lista após criar novo post
       setShowForm(false); // Fecha o formulário
     } catch (error) {
@@ -44,7 +44,7 @@ function App() {
 
   const handleUpdatePost = async (postId, updatedPost) => {
     try {
-      await axios.put(`http://localhost:8080/api/posts/${postId}`, updatedPost);
+      await axios.put(`https://nova-pasta-actz.onrender.com/api/posts/${postId}`, updatedPost);
       fetchPosts(); // Atualiza a lista após atualizar o post
     } catch (error) {
       console.error('Error updating post:', error);
@@ -54,7 +54,7 @@ function App() {
 
   const handleDeletePost = async (postId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/posts/${postId}`);
+      await axios.delete(`https://nova-pasta-actz.onrender.com/api/posts/${postId}`);
       fetchPosts(); // Atualiza a lista após deletar
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -136,7 +136,7 @@ function EditPostWrapper({ onUpdate }) {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:8080/api/posts/${id}`);
+        const response = await axios.get(`https://nova-pasta-actz.onrender.com/api/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (err) {
