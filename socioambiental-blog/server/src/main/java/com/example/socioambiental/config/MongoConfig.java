@@ -29,7 +29,6 @@ public class MongoConfig {
                 .applyToSocketSettings(socketBuilder -> socketBuilder.connectTimeout(30, TimeUnit.SECONDS))
                 .applyToConnectionPoolSettings(poolBuilder -> poolBuilder.maxWaitTime(30, TimeUnit.SECONDS));
 
-        /*
         // Forçar uso do TLS 1.2
         try {
             SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
@@ -38,7 +37,6 @@ public class MongoConfig {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao configurar SSLContext para TLSv1.2", e);
         }
-        */
 
         MongoClientSettings settings = builder.build();
 
