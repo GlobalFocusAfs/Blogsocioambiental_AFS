@@ -24,8 +24,8 @@ public class MongoConfig {
                 .applyConnectionString(new ConnectionString(connectionString))
                 .applyToClusterSettings(clusterBuilder ->
                         clusterBuilder.serverSelectionTimeout(30, TimeUnit.SECONDS))
-                // Temporariamente desabilitar SSL para teste
-                .applyToSslSettings(sslBuilder -> sslBuilder.enabled(false))
+                // Habilitar SSL para conexão com MongoDB Atlas
+                .applyToSslSettings(sslBuilder -> sslBuilder.enabled(true))
                 .applyToSocketSettings(socketBuilder -> socketBuilder.connectTimeout(30, TimeUnit.SECONDS))
                 .applyToConnectionPoolSettings(poolBuilder -> poolBuilder.maxWaitTime(30, TimeUnit.SECONDS));
 
