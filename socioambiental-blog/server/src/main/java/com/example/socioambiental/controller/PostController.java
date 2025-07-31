@@ -23,7 +23,12 @@ public class PostController {
         try {
             return ResponseEntity.ok(postRepository.findAllByOrderByCreatedAtDesc());
         } catch (Exception e) {
+            // Log completo da exceção
             e.printStackTrace();
+            System.err.println("Erro detalhado: " + e.toString());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar publicações: " + e.getMessage());
         }
     }
@@ -39,7 +44,12 @@ public class PostController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
+            // Log completo da exceção
             e.printStackTrace();
+            System.err.println("Erro detalhado: " + e.toString());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar publicação: " + e.getMessage());
         }
     }
@@ -51,7 +61,12 @@ public class PostController {
             Post savedPost = postRepository.save(post);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (Exception e) {
+            // Log completo da exceção
             e.printStackTrace();
+            System.err.println("Erro detalhado: " + e.toString());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar publicação: " + e.getMessage());
         }
     }
@@ -74,7 +89,12 @@ public class PostController {
             Post updatedPost = postRepository.save(post);
             return ResponseEntity.ok(updatedPost);
         } catch (Exception e) {
+            // Log completo da exceção
             e.printStackTrace();
+            System.err.println("Erro detalhado: " + e.toString());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar publicação: " + e.getMessage());
         }
     }
@@ -90,7 +110,12 @@ public class PostController {
             postRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
+            // Log completo da exceção
             e.printStackTrace();
+            System.err.println("Erro detalhado: " + e.toString());
+            for (StackTraceElement element : e.getStackTrace()) {
+                System.err.println("\tat " + element);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar publicação: " + e.getMessage());
         }
     }
