@@ -58,13 +58,11 @@
 
         <!-- Removed explicit mongodb-driver-sync dependency to avoid version conflicts -->
         <!-- Added explicit mongodb-driver-sync dependency version 4.9.1 for MongoDB driver update -->
-        <!--
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.9.1</version>
         </dependency>
-        -->
     </dependencies>
 
     <build>
