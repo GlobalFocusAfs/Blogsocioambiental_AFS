@@ -2,6 +2,8 @@ package com.example.socioambiental.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +22,13 @@ public class MongoConfig {
 
     @Bean
     public MongoClient mongoClient() {
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
+
         MongoClientSettings.Builder builder = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(connectionString))
+                .serverApi(serverApi)
                 .applyToClusterSettings(clusterBuilder ->
                         clusterBuilder.serverSelectionTimeout(30, TimeUnit.SECONDS))
                 // Habilitar SSL para conexão com MongoDB Atlas
@@ -37,17 +44,6 @@ public class MongoConfig {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao configurar SSLContext para TLSv1.2", e);
         }
-        /*
-        // Removido o forçamento do TLSv1.2 para permitir que o driver negocie a versão TLS automaticamente
-        /*
-        try {
-            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, null, null);
-            builder.applyToSslSettings(sslBuilder -> sslBuilder.context(sslContext));
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao configurar SSLContext para TLSv1.2", e);
-        }
-        */
 
         MongoClientSettings settings = builder.build();
 
