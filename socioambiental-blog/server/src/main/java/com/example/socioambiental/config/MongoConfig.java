@@ -30,6 +30,14 @@ public class MongoConfig {
                 .applyToConnectionPoolSettings(poolBuilder -> poolBuilder.maxWaitTime(30, TimeUnit.SECONDS));
 
         // Forçar uso do TLS 1.2
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            sslContext.init(null, null, null);
+            builder.applyToSslSettings(sslBuilder -> sslBuilder.context(sslContext));
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao configurar SSLContext para TLSv1.2", e);
+        }
+        /*
         // Removido o forçamento do TLSv1.2 para permitir que o driver negocie a versão TLS automaticamente
         /*
         try {
