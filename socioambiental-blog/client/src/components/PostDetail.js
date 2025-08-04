@@ -180,8 +180,13 @@ const PostDetail = () => {
           <ul className="comments-list">
             {comments.map((comment) => (
               <li key={comment.id} className="comment-item">
-                <strong>{comment.author || 'Anônimo'}</strong> disse:
-                <p>{comment.content}</p>
+                <div className="comment-header">
+                  <strong>{comment.author || 'Anônimo'}:</strong>
+                  <span className="comment-date">
+                    {format(new Date(comment.createdAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+                  </span>
+                </div>
+                <p className="comment-content">{comment.content}</p>
               </li>
             ))}
           </ul>

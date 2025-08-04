@@ -726,6 +726,26 @@ header.app-header p {
   }
 }
 
+/* Estilos para os comentários melhorados */
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment-date {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.comment-content {
+  margin: 0;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
 @media screen and (max-width: 480px) {
   header.app-header {
     padding: 20px 12px 15px 12px;
@@ -837,6 +857,16 @@ header.app-header p {
   .comment-form .form-group textarea {
     padding: 12px 14px;
     font-size: 0.95rem;
+  }
+  
+  .comment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .comment-date {
+    font-size: 0.8rem;
   }
 }
 
