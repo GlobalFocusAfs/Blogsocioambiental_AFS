@@ -19,7 +19,7 @@ function App() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('https://nova-pasta-actz.onrender.com/posts');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts`);
       // O backend já retorna os posts ordenados, então não precisa ordenar no frontend
       setPosts(response.data);
       setError(null);
@@ -33,7 +33,7 @@ function App() {
 
   const handleNewPost = async (post) => {
     try {
-      await axios.post('https://nova-pasta-actz.onrender.com/posts', post);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts`, post);
       fetchPosts(); // Atualiza a lista após criar novo post
       setShowForm(false); // Fecha o formulário
     } catch (error) {
@@ -44,7 +44,7 @@ function App() {
 
   const handleUpdatePost = async (postId, updatedPost) => {
     try {
-      await axios.put(`https://nova-pasta-actz.onrender.com/posts/${postId}`, updatedPost);
+      await axios.put(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts/${postId}`, updatedPost);
       fetchPosts(); // Atualiza a lista após atualizar o post
     } catch (error) {
       console.error('Error updating post:', error);
@@ -54,7 +54,7 @@ function App() {
 
   const handleDeletePost = async (postId) => {
     try {
-      await axios.delete(`https://nova-pasta-actz.onrender.com/posts/${postId}`);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts/${postId}`);
       fetchPosts(); // Atualiza a lista após deletar
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -125,6 +125,22 @@ function App() {
   );
 }
 
+/* Estilos para o footer */
+const footerStyle = {
+  backgroundColor: '#1b5e20',
+  color: 'white',
+  textAlign: 'center',
+  padding: '20px',
+  marginTop: 'auto',
+  fontSize: '0.9rem'
+};
+
+const AppFooter = () => (
+  <footer style={footerStyle}>
+    <p>© {new Date().getFullYear()} Blog Socioambiental - Todos os direitos reservados</p>
+  </footer>
+);
+
 function EditPostWrapper({ onUpdate }) {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -136,7 +152,7 @@ function EditPostWrapper({ onUpdate }) {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://nova-pasta-actz.onrender.com/posts/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (err) {
