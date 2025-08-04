@@ -8,7 +8,7 @@ import './styles.css';
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -35,7 +35,7 @@ function App() {
     try {
       await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/posts`, post);
       fetchPosts(); // Atualiza a lista após criar novo post
-      setShowForm(false); // Fecha o formulário
+      setShowModal(false); // Fecha o modal
     } catch (error) {
       console.error('Error creating post:', error);
       setError('Erro ao criar a publicação. Verifique os dados e tente novamente.');
@@ -73,15 +73,36 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-              <div className="form-container" style={{marginTop: '20px', marginBottom: '40px'}}>
-                <h2 style={{textAlign: 'center', marginBottom: '25px', color: '#145a32'}}>
+              <div style={{textAlign: 'center', marginBottom: '40px'}}>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => setShowModal(true)}
+                >
                   📝 Criar Nova Publicação
-                </h2>
-                <PostForm 
-                  onSubmit={handleNewPost} 
-                  onCancel={() => window.scrollTo(0, 0)}
-                />
+                </button>
               </div>
+
+              {showModal && (
+                <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <div className="modal-header">
+                      <h2>Criar Nova Publicação</h2>
+                      <button 
+                        className="modal-close" 
+                        onClick={() => setShowModal(false)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <div style={{padding: '20px 30px 30px 30px'}}>
+                      <PostForm 
+                        onSubmit={handleNewPost} 
+                        onCancel={() => setShowModal(false)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {error && <div className="error-message">{error}</div>}
 
