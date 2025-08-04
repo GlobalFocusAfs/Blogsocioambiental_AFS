@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-const PostItem = ({ post, imageBaseUrl = 'http://localhost:8080/uploads' }) => {
+const PostItem = ({ post, imageBaseUrl = `${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/uploads` }) => {
   const navigateToPost = () => {
     window.location.href = `/post/${post.id}`;
   };
