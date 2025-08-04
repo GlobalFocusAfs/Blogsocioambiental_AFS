@@ -73,14 +73,15 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-              {showForm && (
-                <div className="form-container">
-                  <PostForm 
-                    onSubmit={handleNewPost} 
-                    onCancel={() => setShowForm(false)}
-                  />
-                </div>
-              )}
+              <div className="form-container" style={{marginTop: '20px', marginBottom: '40px'}}>
+                <h2 style={{textAlign: 'center', marginBottom: '25px', color: '#145a32'}}>
+                  📝 Criar Nova Publicação
+                </h2>
+                <PostForm 
+                  onSubmit={handleNewPost} 
+                  onCancel={() => window.scrollTo(0, 0)}
+                />
+              </div>
 
               {error && <div className="error-message">{error}</div>}
 
@@ -97,14 +98,6 @@ function App() {
                       onDelete={handleDeletePost} 
                     />
                   )}
-                  <div className="action-bar" style={{marginTop: '30px'}}>
-                    <button 
-                      className="new-post-button"
-                      onClick={() => setShowForm(!showForm)}
-                    >
-                      {showForm ? 'Cancelar' : 'Nova Publicação'}
-                    </button>
-                  </div>
                 </>
               )}
             </>
