@@ -21,7 +21,7 @@ const PostDetail = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'}/api/posts/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (err) {
@@ -36,7 +36,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'}/api/posts/${id}/comments`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/posts/${id}/comments`);
         setComments(response.data);
       } catch (err) {
         setError('Erro ao carregar os comentários.');
@@ -53,22 +53,22 @@ const PostDetail = () => {
     }
     setCommentError(null);
     setCommentSubmitting(true);
-    try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'}/api/posts/${id}/comments`, {
-        author: commentAuthor,
-        content: commentContent,
-      });
-      setCommentAuthor('');
-      setCommentContent('');
-      // Atualiza os comentários após envio
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'}/api/posts/${id}/comments`);
-      setComments(response.data);
-    } catch (err) {
-      setCommentError('Erro ao enviar o comentário. Tente novamente.');
-    } finally {
-      setCommentSubmitting(false);
-    }
-  };
+      try {
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://api-seu-backend.vercel.app'}/api/posts/${id}/comments`, {
+          author: commentAuthor,
+          content: commentContent,
+        });
+        setCommentAuthor('');
+        setCommentContent('');
+        // Atualiza os comentários após envio
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://api-seu-backend.vercel.app'}/api/posts/${id}/comments`);
+        setComments(response.data);
+      } catch (err) {
+        setCommentError('Erro ao enviar o comentário. Tente novamente.');
+      } finally {
+        setCommentSubmitting(false);
+      }
+    };
 
   if (loading) {
     return <div className="loading">Carregando publicação...</div>;
@@ -90,7 +90,7 @@ const PostDetail = () => {
       </div>
       {post.imageFilename && (
         <img
-          src={`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'}/uploads/${post.imageFilename}`}
+          src={`${process.env.REACT_APP_API_BASE_URL || 'https://api-seu-backend.vercel.app'}/uploads/${post.imageFilename}`}
           alt={post.title ? post.title : 'Imagem do post'}
           className="post-image"
           onError={(e) => {
