@@ -13,6 +13,7 @@ public class Post {
     private String imageFilename;  // Alterado de imageUrl para imageFilename
     private Date createdAt;
     private String author;
+    private Date expirationDate; // Nova propriedade para data de expiração
     
     // Constructors
     public Post() {
@@ -76,6 +77,14 @@ public class Post {
         this.author = author;
     }
 
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
     // toString() method for debugging
     @Override
     public String toString() {
@@ -86,6 +95,7 @@ public class Post {
                 ", imageFilename='" + imageFilename + '\'' +
                 ", createdAt=" + createdAt +
                 ", author='" + author + '\'' +
+                ", expirationDate=" + expirationDate +
                 '}';
     }
 }

@@ -6,7 +6,8 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
     title: '',
     content: '',
     imageFilename: '',
-    author: 'Anônimo'
+    author: 'Anônimo',
+    expirationDays: 0 // 0 = permanente
   });
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,10 +20,11 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
         title: initialPost.title || '',
         content: initialPost.content || '',
         imageFilename: initialPost.imageFilename || '',
-        author: initialPost.author || 'Anônimo'
+        author: initialPost.author || 'Anônimo',
+        expirationDays: initialPost.expirationDays || 0
       });
       if (initialPost.imageFilename) {
-        setPreviewImage(`http://localhost:8080/uploads/${initialPost.imageFilename}`);
+        setPreviewImage(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/uploads/${initialPost.imageFilename}`);
       }
     }
   }, [initialPost]);
@@ -41,7 +43,7 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/upload', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/api/upload`, formData);
       setPost({...post, imageFilename: response.data.filename || response.data});
       
       const reader = new FileReader();
@@ -79,7 +81,20 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
 
     setIsSubmitting(true);
     try {
-      await onSubmit(post);
+      // Converter dias para data de expiração
+      let expirationDate = null;
+      if (post.expirationDays > 0) {
+        const date = new Date();
+        date.setDate(date.getDate() + post.expirationDays);
+        expirationDate = date;
+      }
+      
+      const postData = {
+        ...post,
+        expirationDate
+      };
+      
+      await onSubmit(postData);
     } catch (error) {
       setErrorMessage("Erro ao criar a publicação. Verifique os dados e tente novamente.");
     } finally {
@@ -148,6 +163,22 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
             placeholder="Seu nome ou Anônimo"
             disabled={isSubmitting || isUploading}
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="expirationDays">Tempo de permanência</label>
+          <select
+            id="expirationDays"
+            name="expirationDays"
+            value={post.expirationDays}
+            onChange={(e) => setPost({...post, expirationDays: parseInt(e.target.value)})}
+            disabled={isSubmitting || isUploading}
+          >
+            <option value="0">Publicação permanente</option>
+            <option value="10">10 dias</option>
+            <option value="20">20 dias</option>
+            <option value="30">30 dias</option>
+          </select>
         </div>
 
         <div className="form-actions">

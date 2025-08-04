@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +60,13 @@ public class PostController {
     @PostMapping
     public ResponseEntity<?> createPost(@RequestBody Post post) {
         try {
+            // Calcular a data de expiração com base na opção selecionada
+            if (post.getExpirationDate() != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DAY_OF_MONTH, getDaysToAdd(post.getExpirationDate()));
+                post.setExpirationDate(calendar.getTime());
+            }
             Post savedPost = postRepository.save(post);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -69,6 +78,19 @@ public class PostController {
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar publicação: " + e.getMessage());
         }
+    }
+
+    // Método auxiliar para calcular dias a adicionar com base na data de expiração
+    private int getDaysToAdd(Date expirationDate) {
+        // Esta é uma implementação simplificada. Na prática, você pode querer usar uma lógica mais complexa
+        // para determinar os dias com base em um enum ou valor específico enviado pelo frontend.
+        // Por enquanto, assumiremos que expirationDate contém a data alvo e calcularemos os dias até ela.
+        if (expirationDate != null) {
+            long diffInMillies = expirationDate.getTime() - new Date().getTime();
+            long days = diffInMillies / (1000 * 60 * 60 * 24);
+            return (int) days;
+        }
+        return 0; // Permanente
     }
 
     // Update a post by id
@@ -84,6 +106,10 @@ public class PostController {
             post.setContent(postDetails.getContent());
             post.setImageFilename(postDetails.getImageFilename());
             post.setAuthor(postDetails.getAuthor());
+            // Atualizar data de expiração se fornecida
+            if (postDetails.getExpirationDate() != null) {
+                post.setExpirationDate(postDetails.getExpirationDate());
+            }
             // We do not update createdAt to preserve original creation date
 
             Post updatedPost = postRepository.save(post);
@@ -99,10 +125,15 @@ public class PostController {
         }
     }
 
-    // Delete a post by id
+    // Delete a post by id with password protection
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable String id) {
+    public ResponseEntity<?> deletePost(@PathVariable String id, @RequestParam String password) {
         try {
+            // Verificar senha
+            if (!"yagomelhordomundo".equals(password)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Senha incorreta.");
+            }
+            
             Optional<Post> optionalPost = postRepository.findById(id);
             if (!optionalPost.isPresent()) {
                 return ResponseEntity.notFound().build();

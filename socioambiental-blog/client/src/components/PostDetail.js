@@ -10,6 +10,10 @@ const PostDetail = () => {
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteError, setDeleteError] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [comments, setComments] = useState([]);
   const [commentAuthor, setCommentAuthor] = useState('');
@@ -70,6 +74,40 @@ const PostDetail = () => {
       }
     };
 
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+    setDeleteError(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletePassword.trim()) {
+      setDeleteError('Por favor, informe a senha.');
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/posts/${id}?password=${deletePassword}`);
+      // Redirecionar para a página principal após exclusão
+      navigate('/');
+    } catch (err) {
+      if (err.response && err.response.status === 403) {
+        setDeleteError('Senha incorreta.');
+      } else {
+        setDeleteError('Erro ao excluir a publicação.');
+      }
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setDeletePassword('');
+    setDeleteError(null);
+  };
+
   if (loading) {
     return <div className="loading">Carregando publicação...</div>;
   }
@@ -100,6 +138,39 @@ const PostDetail = () => {
         />
       )}
       <p className="post-content">{post.content}</p>
+      
+      <div className="post-actions">
+        <button className="delete-button" onClick={handleDeleteClick}>
+          Excluir Publicação
+        </button>
+      </div>
+
+      {/* Modal de confirmação de exclusão */}
+      {showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Confirmar Exclusão</h3>
+            <p>Tem certeza que deseja excluir esta publicação?</p>
+            <p>Por favor, informe a senha para confirmar:</p>
+            <input
+              type="password"
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+              placeholder="Senha"
+              disabled={isDeleting}
+            />
+            {deleteError && <div className="error-message">{deleteError}</div>}
+            <div className="modal-actions">
+              <button onClick={handleDeleteCancel} disabled={isDeleting}>
+                Cancelar
+              </button>
+              <button onClick={handleDeleteConfirm} disabled={isDeleting} className="delete-button">
+                {isDeleting ? 'Excluindo...' : 'Excluir'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="comments-section">
         <h3>Comentários</h3>

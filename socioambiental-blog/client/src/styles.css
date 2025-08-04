@@ -378,6 +378,222 @@ header.app-header p {
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
 }
 
+/* Post Detail Actions */
+.post-actions {
+  margin: 25px 0;
+  text-align: center;
+}
+
+.delete-button {
+  background: linear-gradient(120deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.delete-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.delete-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #145a32;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  color: #34495e;
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-family: 'Open Sans', sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin: 15px 0;
+}
+
+.modal-content input:focus {
+  border-color: #e74c3c;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.3);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.modal-actions button {
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  user-select: none;
+}
+
+.modal-actions button:first-child {
+  background: #f0f0f0;
+  color: #7f8c8d;
+}
+
+.modal-actions button:first-child:hover {
+  background: #dcdcdc;
+  transform: translateY(-2px);
+}
+
+/* Comentários */
+.comments-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #ecf0f1;
+}
+
+.comments-section h3 {
+  color: #145a32;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.no-comments {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  font-style: italic;
+  text-align: center;
+  margin: 20px 0;
+  padding: 20px;
+  background: #ecf0f1;
+  border-radius: 12px;
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+.comment-item {
+  background: #f8f9fa;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  border: 1px solid #e9ecef;
+}
+
+.comment-item strong {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.comment-item p {
+  color: #34495e;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Formulário de comentário */
+.comment-form {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #e9ecef;
+}
+
+.comment-form .form-group {
+  margin-bottom: 20px;
+}
+
+.comment-form .form-group label {
+  font-weight: 600;
+  color: #27ae60;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.comment-form .form-group input,
+.comment-form .form-group textarea {
+  padding: 14px 16px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.comment-form .form-group textarea {
+  min-height: 120px;
+}
+
+.comment-form .submit-button {
+  padding: 14px 28px;
+  font-size: 1rem;
+  background: linear-gradient(120deg, #2ecc71 0%, #27ae60 100%);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.comment-form .submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
 /* Estilos para dispositivos móveis */
 @media screen and (max-width: 768px) {
   .app-container {
@@ -551,4 +767,76 @@ header.app-header p {
   .form-group textarea {
     font-size: 0.9rem;
   }
+  
+  .post-actions {
+    margin: 20px 0;
+  }
+  
+  .delete-button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .modal-content {
+    padding: 20px 15px;
+  }
+  
+  .modal-content h3 {
+    font-size: 1.5rem;
+  }
+  
+  .modal-content p {
+    font-size: 1rem;
+  }
+  
+  .modal-content input {
+    padding: 12px 14px;
+    font-size: 1rem;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .modal-actions button {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .comments-section {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
+  
+  .comments-section h3 {
+    font-size: 1.3rem;
+  }
+  
+  .comment-item {
+    padding: 15px;
+  }
+  
+  .comment-item strong {
+    font-size: 1rem;
+  }
+  
+  .comment-item p {
+    font-size: 0.9rem;
+  }
+  
+  .comment-form {
+    padding: 20px 15px;
+  }
+  
+  .comment-form .form-group label {
+    font-size: 0.95rem;
+  }
+  
+  .comment-form .form-group input,
+  .comment-form .form-group textarea {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
 }
+
