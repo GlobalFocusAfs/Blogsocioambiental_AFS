@@ -88,7 +88,7 @@ const PostDetail = () => {
     setIsDeleting(true);
     setDeleteError(null);
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/posts/${id}?password=${deletePassword}`);
+            await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts/${id}?password=${deletePassword}`);
       // Redirecionar para a página principal após exclusão
       navigate('/');
     } catch (err) {
@@ -128,7 +128,7 @@ const PostDetail = () => {
       </div>
       {post.imageFilename && (
         <img
-          src={`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/uploads/${post.imageFilename}`}
+          src={`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/uploads/${post.imageFilename}`}
           alt={post.title ? post.title : 'Imagem do post'}
           className="post-image"
           onError={(e) => {
