@@ -19,7 +19,7 @@ function App() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://nova-pasta-actz.onrender.com'}/posts`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts`);
       // O backend já retorna os posts ordenados, então não precisa ordenar no frontend
       setPosts(response.data);
       setError(null);
