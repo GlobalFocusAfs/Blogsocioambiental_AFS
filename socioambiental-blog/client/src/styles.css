@@ -517,8 +517,10 @@ header.app-header p {
   text-align: center;
   margin: 20px 0;
   padding: 20px;
-  background: #ecf0f1;
-  border-radius: 12px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border: 1px solid #e9ecef;
 }
 
 .comments-list {
@@ -528,23 +530,44 @@ header.app-header p {
 }
 
 .comment-item {
-  background: #f8f9fa;
-  border-radius: 14px;
+  background: white;
+  border-radius: 16px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   border: 1px solid #e9ecef;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .comment-item strong {
-  color: #2c3e50;
+  color: #145a32;
   font-size: 1.1rem;
-  display: block;
-  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.comment-date {
+  font-size: 0.85rem;
+  color: #95a5a6;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .comment-item p {
-  color: #34495e;
+  color: #2c3e50;
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;

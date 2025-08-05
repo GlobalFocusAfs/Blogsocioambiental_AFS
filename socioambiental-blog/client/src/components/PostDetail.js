@@ -179,7 +179,7 @@ const PostDetail = () => {
         ) : (
           <ul className="comments-list">
             {comments.map((comment) => (
-              <li key={comment.id} className="comment-item">
+            <li key={comment.id} className="comment-item">
                 <div className="comment-header">
                   <strong>{comment.author || 'Anônimo'}:</strong>
                   <span className="comment-date">
