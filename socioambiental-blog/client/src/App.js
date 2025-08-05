@@ -73,14 +73,31 @@ function App() {
         <Routes>
           <Route path="/" element={
             <>
-              <div style={{textAlign: 'center', marginBottom: '40px'}}>
-                <button 
-                  className="btn btn-primary" 
-                  onClick={() => setShowModal(true)}
-                >
-                  📝 Criar Nova Publicação
-                </button>
-              </div>
+              {error && <div className="error-message">{error}</div>}
+
+              {isLoading ? (
+                <div className="loading">Carregando publicações...</div>
+              ) : (
+                <>
+                  <h2 className="section-title">Últimas Publicações</h2>
+                  {posts.length === 0 ? (
+                    <p className="no-posts">Nenhuma publicação encontrada. Seja o primeiro a compartilhar!</p>
+                  ) : (
+                    <PostList 
+                      posts={posts} 
+                      onDelete={handleDeletePost} 
+                    />
+                  )}
+                  <div style={{textAlign: 'center', marginTop: '40px'}}>
+                    <button 
+                      className="btn btn-primary" 
+                      onClick={() => setShowModal(true)}
+                    >
+                      📝 Criar Nova Publicação
+                    </button>
+                  </div>
+                </>
+              )}
 
               {showModal && (
                 <div className="modal-overlay" onClick={() => setShowModal(false)}>
@@ -102,24 +119,6 @@ function App() {
                     </div>
                   </div>
                 </div>
-              )}
-
-              {error && <div className="error-message">{error}</div>}
-
-              {isLoading ? (
-                <div className="loading">Carregando publicações...</div>
-              ) : (
-                <>
-                  <h2 className="section-title">Últimas Publicações</h2>
-                  {posts.length === 0 ? (
-                    <p className="no-posts">Nenhuma publicação encontrada. Seja o primeiro a compartilhar!</p>
-                  ) : (
-                    <PostList 
-                      posts={posts} 
-                      onDelete={handleDeletePost} 
-                    />
-                  )}
-                </>
               )}
             </>
           } />
