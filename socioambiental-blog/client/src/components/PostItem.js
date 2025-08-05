@@ -22,9 +22,8 @@ const PostItem = ({ post, imageBaseUrl = `${process.env.REACT_APP_API_BASE_URL |
       )}
       <div className="post-content">
         <h3 className="post-title">{post.title}</h3>
-        <div className="post-meta">
-          <span className="post-author">Por {post.author || 'Anônimo'}</span>
-          <span className="post-date">{format(new Date(post.createdAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}</span>
+        <div className="post-meta" aria-label={`Autor: ${post.author || 'Anônimo'}, Data: ${format(new Date(post.createdAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}`}>
+          Por {post.author || 'Anônimo'} • {format(new Date(post.createdAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
         </div>
         <p>{post.content}</p>
       </div>
