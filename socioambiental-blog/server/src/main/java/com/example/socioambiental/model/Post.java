@@ -3,6 +3,7 @@ package com.example.socioambiental.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "posts")
 public class Post {
@@ -10,7 +11,8 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private String imageFilename;  // Alterado de imageUrl para imageFilename
+    private String imageFilename;  // Mantido para compatibilidade
+    private List<String> imageFilenames; // Novo campo para múltiplas imagens
     private Date createdAt;
     private String author;
     private Date expirationDate; // Nova propriedade para data de expiração
