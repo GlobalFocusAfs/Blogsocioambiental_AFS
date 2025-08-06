@@ -1,0 +1,26 @@
+package com.example.socioambiental.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class EnhancedCorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns(
+                    "http://localhost:3000",
+                    "https://blogsocioambiental-afs-1.onrender.com",
+                    "https://blogsocioambiental-afs.vercel.app",
+                    "https://blogsocioambiental-afs-1itd.vercel.app",
+                    "https://*.vercel.app"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                .allowedHeaders("*")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .allowCredentials(true)
+                .maxAge(3600);
+    }
+}
