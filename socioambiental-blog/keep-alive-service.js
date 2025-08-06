@@ -2,25 +2,28 @@
  * Serviço de Keep-Alive para manter o site ativo no Render
  * Execute este script periodicamente (ex: a cada 5-10 minutos)
  * 
+ * URLs configuradas:
+ * Frontend: https://blogsocioambiental-afs-1itd.vercel.app/
+ * Backend: https://blogsocioambiental-afs-1.onrender.com
+ * 
  * Para usar:
  * 1. Instale as dependências: npm install axios
- * 2. Configure a URL do seu backend no Render
- * 3. Execute: node keep-alive-service.js
+ * 2. Execute: node keep-alive-service.js
  */
 
 const axios = require('axios');
 
-// Configurações
+// Configurações - usando as URLs corretas do seu ambiente
 const CONFIG = {
-    // Substitua pela URL do seu backend no Render
-    backendUrl: process.env.RENDER_URL || 'https://seu-backend-no-render.com',
+    // URL do backend no Render - sua URL correta
+    backendUrl: 'https://blogsocioambiental-afs-1.onrender.com',
     
     // Intervalo entre requisições (em milissegundos)
-    // Recomendado: 5-10 minutos (300000-600000ms)
-    interval: 5 * 60 * 1000, // 5 minutos
+    // Recomendado: 10-15 minutos para não sobrecarregar o Render
+    interval: 10 * 60 * 1000, // 10 minutos
     
     // Timeout para requisições
-    timeout: 10000,
+    timeout: 15000,
     
     // Número máximo de tentativas em caso de erro
     maxRetries: 3
@@ -31,11 +34,14 @@ async function keepAlive() {
     const timestamp = new Date().toISOString();
     
     try {
-        console.log(`[${timestamp}] Enviando ping de keep-alive...`);
+        console.log(`[${timestamp}] Enviando ping de keep-alive para ${CONFIG.backendUrl}...`);
         
         // Fazer requisição ao endpoint de health check
         const response = await axios.get(`${CONFIG.backendUrl}/health`, {
-            timeout: CONFIG.timeout
+            timeout: CONFIG.timeout,
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
         });
         
         console.log(`✅ [${timestamp}] Keep-alive bem-sucedido! Status: ${response.data.status}`);
@@ -46,7 +52,10 @@ async function keepAlive() {
         // Tentar novamente com o endpoint /ping se /health falhar
         try {
             const pingResponse = await axios.get(`${CONFIG.backendUrl}/ping`, {
-                timeout: CONFIG.timeout
+                timeout: CONFIG.timeout,
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
             });
             console.log(`✅ [${timestamp}] Ping alternativo bem-sucedido!`);
         } catch (pingError) {
