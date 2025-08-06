@@ -4,6 +4,7 @@ import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
+import keepAliveService from './utils/keepAlive';
 import './styles.css';
 
 function App() {
@@ -14,6 +15,18 @@ function App() {
 
   useEffect(() => {
     fetchPosts();
+    
+    // Iniciar serviço de keep-alive apenas em produção
+    if (process.env.NODE_ENV === 'production') {
+      keepAliveService.start();
+    }
+
+    // Limpar quando o componente desmontar
+    return () => {
+      if (process.env.NODE_ENV === 'production') {
+        keepAliveService.stop();
+      }
+    };
   }, []);
 
   const fetchPosts = async () => {

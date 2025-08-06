@@ -1,0 +1,25 @@
+{
+  "name": "socioambiental-keep-alive",
+  "version": "1.0.0",
+  "description": "Serviço de keep-alive para manter o backend ativo no Render",
+  "main": "keep-alive-service.js",
+  "scripts": {
+    "start": "node keep-alive-service.js",
+    "test": "node keep-alive-service.js --test",
+    "dev": "nodemon keep-alive-service.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "keep-alive",
+    "render",
+    "monitoring",
+    "health-check"
+  ],
+  "author": "Blog Socioambiental",
+  "license": "MIT"
+}
