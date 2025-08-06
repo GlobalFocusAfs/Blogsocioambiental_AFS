@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { ArrowLeft, ZoomIn, ZoomOut, X } from 'lucide-react';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -131,6 +132,15 @@ const PostDetail = () => {
           src={`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`}
           alt={post.title ? post.title : 'Imagem do post'}
           className="post-image"
+          style={{ cursor: 'pointer' }}
+          title="Clique para ver a imagem completa"
+          onClick={() => {
+            window.open(
+              `${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`,
+              '_blank',
+              'noopener,noreferrer'
+            );
+          }}
           onError={(e) => {
             e.target.style.display = 'none';
             e.target.alt = 'Imagem não disponível';
