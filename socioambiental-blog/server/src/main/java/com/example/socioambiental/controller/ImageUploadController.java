@@ -18,6 +18,7 @@ import java.util.List;
 public class ImageUploadController {
 
     private static final String UPLOAD_DIR = "server/uploads/";
+    private static final String UPLOAD_DIR_ROOT = "uploads/";
 
     @PostMapping("/upload-multiple")
     public ResponseEntity<?> uploadMultipleImages(@RequestParam("images") MultipartFile[] images) {
@@ -27,12 +28,17 @@ public class ImageUploadController {
             for (MultipartFile image : images) {
                 if (!image.isEmpty()) {
                     String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+                    
+                    // Salvar no diretório server/uploads/
                     Path filePath = Paths.get(UPLOAD_DIR + fileName);
-                    
-                    // Criar diretório se não existir
                     Files.createDirectories(filePath.getParent());
-                    
                     Files.write(filePath, image.getBytes());
+                    
+                    // Também salvar uma cópia no diretório uploads/ raiz para compatibilidade
+                    Path rootFilePath = Paths.get(UPLOAD_DIR_ROOT + fileName);
+                    Files.createDirectories(rootFilePath.getParent());
+                    Files.write(rootFilePath, image.getBytes());
+                    
                     uploadedFiles.add(fileName);
                 }
             }

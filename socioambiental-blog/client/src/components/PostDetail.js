@@ -142,8 +142,12 @@ const PostDetail = () => {
             );
           }}
           onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.alt = 'Imagem não disponível';
+            // Tentar carregar da pasta static se falhar
+            e.target.src = `${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`;
+            e.target.onerror = () => {
+              e.target.style.display = 'none';
+              e.target.alt = 'Imagem não disponível';
+            };
           }}
         />
       )}
