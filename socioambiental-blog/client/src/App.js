@@ -19,7 +19,7 @@ function App() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts`);
       // O backend já retorna os posts ordenados, então não precisa ordenar no frontend
       setPosts(response.data);
       setError(null);
@@ -33,7 +33,7 @@ function App() {
 
   const handleNewPost = async (post) => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts`, post);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts`, post);
       fetchPosts(); // Atualiza a lista após criar novo post
       setShowModal(false); // Fecha o modal
     } catch (error) {
@@ -44,7 +44,7 @@ function App() {
 
   const handleUpdatePost = async (postId, updatedPost) => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts/${postId}`, updatedPost);
+      await axios.put(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${postId}`, updatedPost);
       fetchPosts(); // Atualiza a lista após atualizar o post
     } catch (error) {
       console.error('Error updating post:', error);
@@ -54,7 +54,7 @@ function App() {
 
   const handleDeletePost = async (postId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts/${postId}`);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${postId}`);
       fetchPosts(); // Atualiza a lista após deletar
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -165,7 +165,7 @@ function EditPostWrapper({ onUpdate }) {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (err) {

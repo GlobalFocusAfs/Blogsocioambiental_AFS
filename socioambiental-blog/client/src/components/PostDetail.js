@@ -25,7 +25,7 @@ const PostDetail = () => {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}`);
         setPost(response.data);
         setError(null);
       } catch (err) {
@@ -40,7 +40,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/api/posts/${id}/comments`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`);
         setComments(response.data);
       } catch (err) {
         setError('Erro ao carregar os comentários.');
@@ -58,14 +58,14 @@ const PostDetail = () => {
     setCommentError(null);
     setCommentSubmitting(true);
       try {
-        await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/api/posts/${id}/comments`, {
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`, {
           author: commentAuthor,
           content: commentContent,
         });
         setCommentAuthor('');
         setCommentContent('');
         // Atualiza os comentários após envio
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/api/posts/${id}/comments`);
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`);
         setComments(response.data);
       } catch (err) {
         setCommentError('Erro ao enviar o comentário. Tente novamente.');
@@ -88,7 +88,7 @@ const PostDetail = () => {
     setIsDeleting(true);
     setDeleteError(null);
     try {
-            await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/posts/${id}?password=${deletePassword}`);
+            await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}?password=${deletePassword}`);
       // Redirecionar para a página principal após exclusão
       navigate('/');
     } catch (err) {
@@ -128,7 +128,7 @@ const PostDetail = () => {
       </div>
       {post.imageFilename && (
         <img
-          src={`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/uploads/${post.imageFilename}`}
+          src={`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`}
           alt={post.title ? post.title : 'Imagem do post'}
           className="post-image"
           onError={(e) => {

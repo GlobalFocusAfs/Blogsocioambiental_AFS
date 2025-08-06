@@ -24,7 +24,7 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
         expirationDays: initialPost.expirationDays || 0
       });
       if (initialPost.imageFilename) {
-        setPreviewImage(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/uploads/${initialPost.imageFilename}`);
+        setPreviewImage(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${initialPost.imageFilename}`);
       }
     }
   }, [initialPost]);
@@ -43,7 +43,7 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs.onrender.com'}/api/upload`, formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/upload`, formData);
       setPost({...post, imageFilename: response.data.filename || response.data});
       
       const reader = new FileReader();

@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                     "http://localhost:3000",
-                    "https://blogsocioambiental-afs.onrender.com",
+                    "https://blogsocioambiental-afs-1.onrender.com",
                     "https://blogsocioambiental-afs.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
