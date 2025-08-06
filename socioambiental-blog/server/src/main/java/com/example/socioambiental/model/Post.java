@@ -63,6 +63,14 @@ public class Post {
         this.imageFilename = imageFilename;
     }
 
+    public List<String> getImageFilenames() {
+        return imageFilenames;
+    }
+
+    public void setImageFilenames(List<String> imageFilenames) {
+        this.imageFilenames = imageFilenames;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
