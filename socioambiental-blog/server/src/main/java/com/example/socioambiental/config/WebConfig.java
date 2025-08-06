@@ -13,7 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                     "http://localhost:3000",
                     "https://blogsocioambiental-afs-1.onrender.com",
-                    "https://blogsocioambiental-afs.vercel.app"
+                    "https://blogsocioambiental-afs.vercel.app",
+                    "https://blogsocioambiental-afs-1itd.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
