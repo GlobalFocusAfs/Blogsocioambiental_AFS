@@ -120,30 +120,50 @@ public class SystemController {
         post1.setTitle("🌱 A Importância da Sustentabilidade");
         post1.setContent("A sustentabilidade é fundamental para garantir um futuro melhor para as próximas gerações. Pequenas ações no nosso dia a dia podem fazer uma grande diferença no mundo.");
         post1.setAuthor("Equipe Socioambiental");
-        post1.setImageUrl("https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3");
-        post1.setCategory("Sustentabilidade");
-        post1.setTags(Arrays.asList("meio-ambiente", "sustentabilidade", "futuro"));
-        post1.setCreatedAt(LocalDateTime.now());
+        post1.setImageFilename("https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3");
+        post1.setCreatedAt(new Date());
         posts.add(post1);
 
         Post post2 = new Post();
         post2.setTitle("🌍 Mudanças Climáticas: O Que Podemos Fazer?");
         post2.setContent("As mudanças climáticas são uma realidade que enfrentamos todos os dias. Aqui estão algumas ações práticas que você pode tomar para ajudar o planeta.");
         post2.setAuthor("Maria Silva");
-        post2.setImageUrl("https://images.unsplash.com/photo-1569163139394-de44aa99b2c5?ixlib=rb-4.0.3");
-        post2.setCategory("Clima");
-        post2.setTags(Arrays.asList("clima", "ação", "mudança"));
-        post2.setCreatedAt(LocalDateTime.now());
+        post2.setImageFilename("https://images.unsplash.com/photo-1569163139394-de44aa99b2c5?ixlib=rb-4.0.3");
+        post2.setCreatedAt(new Date());
         posts.add(post2);
 
         Post post3 = new Post();
         post3.setTitle("♻️ Reciclagem: Guia Prático para Iniciantes");
         post3.setContent("Reciclar é mais simples do que parece! Este guia vai te ajudar a começar sua jornada na reciclagem de forma correta e eficiente.");
         post3.setAuthor("João Santos");
-        post3.setImageUrl("https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?ixlib=rb-4.0.3");
-        post3.setCategory("Reciclagem");
-        post3.setTags(Arrays.asList("reciclagem", "guia", "prático"));
-        post3.setCreatedAt(LocalDateTime.now());
+        post3.setImageFilename("https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?ixlib=rb-4.0.3");
+        post3.setCreatedAt(new Date());
         posts.add(post3);
+        
+        return posts;
+    }
+
+    private List<Comment> createSampleComments(List<Post> posts) {
+        List<Comment> comments = new ArrayList<>();
+        
+        if (!posts.isEmpty()) {
+            Post firstPost = posts.get(0);
+            
+            Comment comment1 = new Comment();
+            comment1.setPostId(firstPost.getId());
+            comment1.setContent("Ótimo artigo! Muito esclarecedor sobre a importância da sustentabilidade.");
+            comment1.setAuthor("Ana Costa");
+            comment1.setCreatedAt(new Date());
+            comments.add(comment1);
+            
+            Comment comment2 = new Comment();
+            comment2.setPostId(firstPost.getId());
+            comment2.setContent("Concordo plenamente! Já comecei a implementar algumas dessas práticas em casa.");
+            comment2.setAuthor("Carlos Oliveira");
+            comment2.setCreatedAt(new Date());
+            comments.add(comment2);
+        }
+        
+        return comments;
     }
 }
