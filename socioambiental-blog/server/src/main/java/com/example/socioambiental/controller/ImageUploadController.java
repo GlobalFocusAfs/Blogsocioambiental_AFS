@@ -17,8 +17,8 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ImageUploadController {
 
-    private static final String UPLOAD_DIR = "server/uploads/";
-    private static final String UPLOAD_DIR_ROOT = "uploads/";
+    private static final String UPLOAD_DIR = "./uploads/";
+    private static final String UPLOAD_DIR_ROOT = "./uploads/";
 
     @PostMapping("/upload-multiple")
     public ResponseEntity<?> uploadMultipleImages(@RequestParam("images") MultipartFile[] images) {

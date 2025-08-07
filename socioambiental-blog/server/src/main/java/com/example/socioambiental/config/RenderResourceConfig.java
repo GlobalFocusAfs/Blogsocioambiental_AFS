@@ -5,20 +5,16 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class StaticResourceConfig implements WebMvcConfigurer {
+public class RenderResourceConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Configuração para ambiente de produção (Render)
+        // Configuração específica para Render
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:./uploads/");
         
-        // Configuração alternativa para compatibilidade
-        registry.addResourceHandler("/static/**")
+        // Garantir que o diretório uploads seja acessível
+        registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:./uploads/");
-        
-        // Configuração para ambiente local (fallback)
-        registry.addResourceHandler("/local-uploads/**")
-                .addResourceLocations("file:server/uploads/");
     }
 }
