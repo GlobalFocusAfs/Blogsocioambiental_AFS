@@ -85,7 +85,6 @@ class KeepAliveService {
                 method: 'GET',
                 signal: controller.signal,
                 headers: {
-                    'Cache-Control': 'no-cache',
                     'Accept': 'application/json'
                 }
             });
