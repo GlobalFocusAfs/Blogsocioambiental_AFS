@@ -19,8 +19,8 @@ const CONFIG = {
     backendUrl: 'https://blogsocioambiental-afs-1.onrender.com',
     
     // Intervalo entre requisições (em milissegundos)
-    // Recomendado: 10-15 minutos para não sobrecarregar o Render
-    interval: 10 * 60 * 1000, // 10 minutos
+    // Ajustado para 4 minutos conforme solicitado
+    interval: 4 * 60 * 1000, // 4 minutos
     
     // Timeout para requisições
     timeout: 15000,
