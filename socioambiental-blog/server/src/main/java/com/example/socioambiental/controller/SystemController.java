@@ -113,6 +113,42 @@ public class SystemController {
         return ResponseEntity.ok(response);
     }
 
+    // Endpoint para diagnóstico de uploads
+    @GetMapping("/uploads-info")
+    public ResponseEntity<Map<String, Object>> getUploadsInfo() {
+        Map<String, Object> response = new HashMap<>();
+        
+        String uploadDir = System.getProperty("user.dir") + "/uploads/";
+        File uploadDirectory = new File(uploadDir);
+        
+        response.put("workingDirectory", System.getProperty("user.dir"));
+        response.put("uploadDirectory", uploadDir);
+        response.put("uploadDirectoryAbsolute", uploadDirectory.getAbsolutePath());
+        response.put("uploadDirectoryExists", uploadDirectory.exists());
+        
+        if (uploadDirectory.exists()) {
+            File[] files = uploadDirectory.listFiles();
+            if (files != null) {
+                List<Map<String, String>> fileList = new ArrayList<>();
+                for (File file : files) {
+                    Map<String, String> fileInfo = new HashMap<>();
+                    fileInfo.put("name", file.getName());
+                    fileInfo.put("size", String.valueOf(file.length()));
+                    fileInfo.put("path", file.getAbsolutePath());
+                    fileList.add(fileInfo);
+                }
+                response.put("files", fileList);
+                response.put("fileCount", files.length);
+            }
+        }
+        
+        // Verificar URLs de acesso
+        response.put("uploadUrl", "/uploads/");
+        response.put("staticUrl", "/static/");
+        
+        return ResponseEntity.ok(response);
+    }
+
     private List<Post> createSamplePosts() {
         List<Post> posts = new ArrayList<>();
         

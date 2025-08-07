@@ -17,27 +17,27 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ImageUploadController {
 
-    private static final String UPLOAD_DIR = "./uploads/";
-    private static final String UPLOAD_DIR_ROOT = "./uploads/";
-
+    // Usar caminho absoluto para garantir compatibilidade com Render
+    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
+    
     @PostMapping("/upload-multiple")
     public ResponseEntity<?> uploadMultipleImages(@RequestParam("images") MultipartFile[] images) {
         try {
             List<String> uploadedFiles = new ArrayList<>();
             
+            // Garantir que o diretório existe
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            
             for (MultipartFile image : images) {
                 if (!image.isEmpty()) {
                     String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
                     
-                    // Salvar no diretório server/uploads/
-                    Path filePath = Paths.get(UPLOAD_DIR + fileName);
-                    Files.createDirectories(filePath.getParent());
+                    // Salvar no diretório uploads/
+                    Path filePath = uploadPath.resolve(fileName);
                     Files.write(filePath, image.getBytes());
-                    
-                    // Também salvar uma cópia no diretório uploads/ raiz para compatibilidade
-                    Path rootFilePath = Paths.get(UPLOAD_DIR_ROOT + fileName);
-                    Files.createDirectories(rootFilePath.getParent());
-                    Files.write(rootFilePath, image.getBytes());
                     
                     uploadedFiles.add(fileName);
                 }
