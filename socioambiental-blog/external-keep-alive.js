@@ -33,6 +33,6 @@ async function keepBackendAlive() {
     }
 }
 
-// Executar imediatamente e depois a cada 4 minutos
+// Executar imediatamente e depois a cada 45 segundos
 keepBackendAlive();
-setInterval(keepBackendAlive, 2 * 60 * 1000); // 4 minutos
+setInterval(keepBackendAlive, 45 * 1000); // 45 segundos

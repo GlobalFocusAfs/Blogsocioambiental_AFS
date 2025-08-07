@@ -20,7 +20,7 @@ const CONFIG = {
     
     // Intervalo entre requisições (em milissegundos)
     // Ajustado para 3 minutos conforme solicitado
-    interval: 2 * 60 * 1000, // 3 minutos
+    interval: 45 * 1000, // 45 segundos
     
     // Timeout para requisições
     timeout: 15000,

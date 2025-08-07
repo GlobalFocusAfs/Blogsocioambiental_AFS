@@ -13,7 +13,7 @@ const KEEP_ALIVE_CONFIG = {
     backendUrl: 'https://blogsocioambiental-afs-1.onrender.com',
     
     // Intervalo entre requisições (em milissegundos)
-    interval: 3 * 60 * 1000, // 3 minutos para manter o backend ativo
+    interval: 45 * 1000, // 45 segundos para manter o backend ativo
     
     // Ativar/desativar o keep-alive
     enabled: true,
