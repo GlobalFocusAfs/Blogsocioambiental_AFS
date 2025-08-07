@@ -127,20 +127,25 @@ public class SystemController {
         response.put("uploadDirectoryAbsolute", uploadDirectory.getAbsolutePath());
         response.put("uploadDirectoryExists", uploadDirectory.exists());
         
-        if (uploadDirectory.exists()) {
-            File[] files = uploadDirectory.listFiles();
-            if (files != null) {
-                List<Map<String, String>> fileList = new ArrayList<>();
-                for (File file : files) {
-                    Map<String, String> fileInfo = new HashMap<>();
-                    fileInfo.put("name", file.getName());
-                    fileInfo.put("size", String.valueOf(file.length()));
-                    fileInfo.put("path", file.getAbsolutePath());
-                    fileList.add(fileInfo);
+        try {
+            if (uploadDirectory.exists()) {
+                File[] files = uploadDirectory.listFiles();
+                if (files != null) {
+                    List<Map<String, String>> fileList = new ArrayList<>();
+                    for (File file : files) {
+                        Map<String, String> fileInfo = new HashMap<>();
+                        fileInfo.put("name", file.getName());
+                        fileInfo.put("size", String.valueOf(file.length()));
+                        fileInfo.put("path", file.getAbsolutePath());
+                        fileList.add(fileInfo);
+                    }
+                    response.put("files", fileList);
+                    response.put("fileCount", files.length);
                 }
-                response.put("files", fileList);
-                response.put("fileCount", files.length);
             }
+        } catch (Exception e) {
+            response.put("error", "Exception while listing files: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
         
         // Verificar URLs de acesso
