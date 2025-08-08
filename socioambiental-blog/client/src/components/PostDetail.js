@@ -4,6 +4,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ArrowLeft, ZoomIn, ZoomOut, X } from 'lucide-react';
+import { buildImageUrl, handleImageError } from '../utils/imageUrlUtils';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -11,16 +12,7 @@ const PostDetail = () => {
   const [post, setPost] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deletePassword, setDeletePassword] = useState('');
-  const [deleteError, setDeleteError] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const [comments, setComments] = useState([]);
-  const [commentAuthor, setCommentAuthor] = useState('');
-  const [commentContent, setCommentContent] = useState('');
-  const [commentError, setCommentError] = useState(null);
-  const [commentSubmitting, setCommentSubmitting] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -58,22 +50,21 @@ const PostDetail = () => {
     }
     setCommentError(null);
     setCommentSubmitting(true);
-      try {
-        await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`, {
-          author: commentAuthor,
-          content: commentContent,
-        });
-        setCommentAuthor('');
-        setCommentContent('');
-        // Atualiza os comentários após envio
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`);
-        setComments(response.data);
-      } catch (err) {
-        setCommentError('Erro ao enviar o comentário. Tente novamente.');
-      } finally {
-        setCommentSubmitting(false);
-      }
-    };
+    try {
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`, {
+        author: commentAuthor,
+        content: commentContent,
+      });
+      setCommentAuthor('');
+      setCommentContent('');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/posts/${id}/comments`);
+      setComments(response.data);
+    } catch (err) {
+      setCommentError('Erro ao enviar o comentário. Tente novamente.');
+    } finally {
+      setCommentSubmitting(false);
+    }
+  };
 
   const handleDeleteClick = () => {
     setShowDeleteModal(true);
@@ -85,12 +76,10 @@ const PostDetail = () => {
       setDeleteError('Por favor, informe a senha.');
       return;
     }
-
     setIsDeleting(true);
     setDeleteError(null);
     try {
-            await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}?password=${deletePassword}`);
-      // Redirecionar para a página principal após exclusão
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}?password=${deletePassword}`);
       navigate('/');
     } catch (err) {
       if (err.response && err.response.status === 403) {
@@ -129,26 +118,19 @@ const PostDetail = () => {
       </div>
       {post.imageFilename && (
         <img
-          src={`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`}
-          alt={post.title ? post.title : 'Imagem do post'}
+          src={buildImageUrl(post.imageFilename)}
+          alt={post.title}
           className="post-image"
           style={{ cursor: 'pointer' }}
           title="Clique para ver a imagem completa"
           onClick={() => {
             window.open(
-              `${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`,
+              buildImageUrl(post.imageFilename),
               '_blank',
               'noopener,noreferrer'
             );
           }}
-          onError={(e) => {
-            // Tentar carregar da pasta static se falhar
-            e.target.src = `${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${post.imageFilename}`;
-            e.target.onerror = () => {
-              e.target.style.display = 'none';
-              e.target.alt = 'Imagem não disponível';
-            };
-          }}
+          onError={(e) => handleImageError(e, buildImageUrl(post.imageFilename))}
         />
       )}
       <p className="post-content">{post.content}</p>
@@ -158,34 +140,7 @@ const PostDetail = () => {
           Excluir Publicação
         </button>
       </div>
-
-      {/* Modal de confirmação de exclusão */}
-      {showDeleteModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Confirmar Exclusão</h3>
-            <p>Tem certeza que deseja excluir esta publicação?</p>
-            <p>Por favor, informe a senha para confirmar:</p>
-            <input
-              type="password"
-              value={deletePassword}
-              onChange={(e) => setDeletePassword(e.target.value)}
-              placeholder="Senha"
-              disabled={isDeleting}
-            />
-            {deleteError && <div className="error-message">{deleteError}</div>}
-            <div className="modal-actions">
-              <button onClick={handleDeleteCancel} disabled={isDeleting}>
-                Cancelar
-              </button>
-              <button onClick={handleDeleteConfirm} disabled={isDeleting} className="delete-button">
-                {isDeleting ? 'Excluindo...' : 'Excluir'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
+      
       <section className="comments-section">
         <h3>Comentários</h3>
         {comments.length === 0 ? (
@@ -205,7 +160,7 @@ const PostDetail = () => {
             ))}
           </ul>
         )}
-
+        
         <form onSubmit={handleCommentSubmit} className="comment-form">
           {commentError && <div className="error-message">{commentError}</div>}
           <div className="form-group">
