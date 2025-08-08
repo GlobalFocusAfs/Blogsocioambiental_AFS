@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "client/build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/client/build/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "https://blogsocioambiental-afs.vercel.app/api/$1"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "https://blogsocioambiental-afs.vercel.app"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
