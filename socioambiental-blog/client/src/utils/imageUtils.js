@@ -8,13 +8,8 @@
 export const getImageUrl = (filename) => {
     if (!filename) return '';
     
-    // Usar a URL base do servidor atual
-    const baseUrl = window.location.origin;
-    
-    // Remover barras duplicadas e garantir formato correto
-    const cleanFilename = filename.replace(/^\/+/, '');
-    
-    return `${baseUrl}/uploads/${cleanFilename}`;
+    // Usar URL relativa para evitar problemas de CORS
+    return `/uploads/${filename}`;
 };
 
 /**
