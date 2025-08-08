@@ -27,6 +27,15 @@ export const getPreviewImageUrl = (imagePath) => {
 };
 
 /**
+ * Gera URL de imagem para uso no build
+ * @param {string} imagePath - caminho ou nome da imagem
+ * @returns {string} URL completa da imagem
+ */
+export const buildImageUrl = (imagePath) => {
+  return getPreviewImageUrl(imagePath);
+};
+
+/**
  * Verifica se a imagem existe antes de exibir
  * @param {string} imageUrl - URL da imagem
  * @returns {Promise<string>} URL válida ou placeholder
@@ -48,4 +57,18 @@ export const validateImageUrl = async (imageUrl) => {
  */
 export const getImagePlaceholder = () => {
   return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNkI3MjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPkltYWdlbSBuw6NvIGVuc29yYWRhPC90ZXh0Pgo8L3N2Zz4K';
+};
+
+/**
+ * Manipula erros de carregamento de imagem
+ * @param {Event} event - Evento de erro da imagem
+ * @param {string} fallbackUrl - URL alternativa ou placeholder
+ */
+export const handleImageError = (event, fallbackUrl = null) => {
+  if (fallbackUrl) {
+    event.target.src = fallbackUrl;
+  } else {
+    event.target.src = getImagePlaceholder();
+  }
+  event.target.onerror = null; // Previne loop infinito
 };
