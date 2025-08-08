@@ -1,8 +1,9 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { getImageUrl } from '../utils/imageUtils';
 
-const PostItem = ({ post, imageBaseUrl = `${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads` }) => {
+const PostItem = ({ post }) => {
   const navigateToPost = () => {
     window.location.href = `/post/${post.id}`;
   };
@@ -11,11 +12,11 @@ const PostItem = ({ post, imageBaseUrl = `${process.env.REACT_APP_API_BASE_URL |
     <div className="post-card" onClick={navigateToPost} style={{ cursor: 'pointer' }} role="button" tabIndex={0} onKeyPress={(e) => { if (e.key === 'Enter') navigateToPost(); }}>
       {post.imageFilename && (
         <img 
-          src={`${imageBaseUrl}/${post.imageFilename}`} 
-          alt={post.title ? post.title : 'Imagem do post'} 
+          src={getImageUrl(post.imageFilename)} 
+          alt={post.title || 'Imagem do post'} 
           className="post-image"
           onError={(e) => {
-            e.target.style.display = 'none';
+            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNkI3MjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPkltYWdlbSBuw6NvIGVuc29yYWRhPC90ZXh0Pgo8L3N2Zz4K';
             e.target.alt = 'Imagem não disponível';
           }}
         />
