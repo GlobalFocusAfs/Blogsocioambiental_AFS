@@ -1,5 +1,6 @@
 package com.example.socioambiental.controller;
 
+import com.example.socioambiental.config.RenderPersistentUploadConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +18,16 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ImageUploadController {
 
-    // Usar caminho absoluto para garantir compatibilidade com Render
-    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
-    
     @PostMapping("/upload-multiple")
     public ResponseEntity<?> uploadMultipleImages(@RequestParam("images") MultipartFile[] images) {
         try {
             List<String> uploadedFiles = new ArrayList<>();
             
+            // Usar diretório persistente do Render
+            String uploadDir = RenderPersistentUploadConfig.getUploadDirectory();
+            Path uploadPath = Paths.get(uploadDir);
+            
             // Garantir que o diretório existe
-            Path uploadPath = Paths.get(UPLOAD_DIR);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -35,7 +36,7 @@ public class ImageUploadController {
                 if (!image.isEmpty()) {
                     String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
                     
-                    // Salvar no diretório uploads/
+                    // Salvar no diretório persistente
                     Path filePath = uploadPath.resolve(fileName);
                     Files.write(filePath, image.getBytes());
                     
