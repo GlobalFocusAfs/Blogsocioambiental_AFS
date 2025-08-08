@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { getImageUrl } from '../utils/imageUtils';
+import { getPreviewImageUrl } from '../utils/imageUrlUtils';
 
 const PostItem = ({ post }) => {
   const navigateToPost = () => {
@@ -12,7 +12,7 @@ const PostItem = ({ post }) => {
     <div className="post-card" onClick={navigateToPost} style={{ cursor: 'pointer' }} role="button" tabIndex={0} onKeyPress={(e) => { if (e.key === 'Enter') navigateToPost(); }}>
       {post.imageFilename && (
         <img 
-          src={getImageUrl(post.imageFilename)} 
+          src={getPreviewImageUrl(post.imageFilename)} 
           alt={post.title || 'Imagem do post'} 
           className="post-image"
           onError={(e) => {

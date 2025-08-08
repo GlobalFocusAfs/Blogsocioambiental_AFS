@@ -1,98 +1,51 @@
 /**
- * Enhanced image URL utilities to fix 404 errors
+ * Utilitários para gerar URLs corretas de imagens em diferentes ambientes
  */
 
-// Environment detection
-const getEnvironment = () => {
-  const hostname = window.location.hostname;
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'development';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://blogsocioambiental-afs-1.onrender.com';
+
+/**
+ * Gera URL completa para imagem nas pré-visualizações
+ * @param {string} imagePath - caminho ou nome da imagem
+ * @returns {string} URL completa da imagem
+ */
+export const getPreviewImageUrl = (imagePath) => {
+  if (!imagePath) return '';
+  
+  // Se já for uma URL completa (http ou https), retorna como está
+  if (imagePath.startsWith('http')) {
+    return imagePath;
   }
-  return 'production';
+  
+  // Se for uma URL relativa, converte para URL absoluta
+  if (imagePath.startsWith('/')) {
+    return `${API_BASE_URL}${imagePath}`;
+  }
+  
+  // Se for apenas o nome do arquivo, monta a URL completa
+  return `${API_BASE_URL}/uploads/${imagePath}`;
 };
 
-// Base URL configuration
-const getBaseUrl = () => {
-  const env = getEnvironment();
-  
-  if (env === 'development') {
-    return 'http://localhost:8080';
-  }
-  
-  // Production - Render deployment
-  return 'https://blogsocioambiental-afs-1.onrender.com';
-};
-
-// Image URL construction with fallback
-export const buildImageUrl = (filename) => {
-  if (!filename) return null;
-  
-  // Remove any leading slashes or protocol prefixes
-  let cleanFilename = filename.replace(/^https?:\/\//, '');
-  cleanFilename = cleanFilename.replace(/^\/+/, '');
-  
-  // Handle different filename formats
-  if (cleanFilename.startsWith('uploads/')) {
-    cleanFilename = cleanFilename.replace('uploads/', '');
-  }
-  
-  // Construct final URL
-  const baseUrl = getBaseUrl();
-  return `${baseUrl}/uploads/${cleanFilename}`;
-};
-
-// Image error handler with retry mechanism
-export const handleImageError = (event, originalSrc) => {
-  console.warn('Image failed to load:', originalSrc);
-  
-  // Prevent infinite retry loop
-  if (event.target.dataset.retryCount >= 2) {
-    event.target.src = 'https://via.placeholder.com/400x300?text=Imagem+Indisponível';
-    return;
-  }
-  
-  // Increment retry count
-  const retryCount = parseInt(event.target.dataset.retryCount || '0') + 1;
-  event.target.dataset.retryCount = retryCount;
-  
-  // Try alternative URL format
-  const altUrl = originalSrc.includes('/uploads/') 
-    ? originalSrc.replace('/uploads/', '/uploads/')
-    : originalSrc;
-    
-  if (altUrl !== originalSrc) {
-    event.target.src = altUrl;
-  } else {
-    event.target.src = 'https://via.placeholder.com/400x300?text=Imagem+Indisponível';
-  }
-};
-
-// Check if image exists
-export const verifyImageExists = async (filename) => {
-  if (!filename) return false;
-  
-  const imageUrl = buildImageUrl(filename);
+/**
+ * Verifica se a imagem existe antes de exibir
+ * @param {string} imageUrl - URL da imagem
+ * @returns {Promise<string>} URL válida ou placeholder
+ */
+export const validateImageUrl = async (imageUrl) => {
+  if (!imageUrl) return '';
   
   try {
     const response = await fetch(imageUrl, { method: 'HEAD' });
-    return response.ok;
+    return response.ok ? imageUrl : '';
   } catch (error) {
-    console.error('Error checking image existence:', error);
-    return false;
+    console.error('Erro ao validar imagem:', error);
+    return '';
   }
 };
 
-// Get placeholder image
-export const getPlaceholderImage = () => {
-  return 'https://via.placeholder.com/400x300?text=Imagem+Indisponível';
-};
-
-// Validate image filename
-export const validateImageFilename = (filename) => {
-  if (!filename) return false;
-  
-  const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-  const extension = filename.split('.').pop()?.toLowerCase();
-  
-  return validExtensions.includes(extension);
+/**
+ * Retorna placeholder para imagens quebradas
+ */
+export const getImagePlaceholder = () => {
+  return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNkI3MjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiPkltYWdlbSBuw6NvIGVuc29yYWRhPC90ZXh0Pgo8L3N2Zz4K';
 };
