@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.socioambiental.controller.PasswordRequest;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -93,10 +95,15 @@ public class PostController {
         return 0; // Permanente
     }
 
-    // Update a post by id
+    // Update a post by id with password validation
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable String id, @RequestBody Post postDetails) {
+    public ResponseEntity<?> updatePost(@PathVariable String id, @RequestParam String password, @RequestBody Post postDetails) {
         try {
+            // Verificar senha
+            if (!"yagomelhordomundo".equals(password)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Senha incorreta.");
+            }
+
             Optional<Post> optionalPost = postRepository.findById(id);
             if (!optionalPost.isPresent()) {
                 return ResponseEntity.notFound().build();
@@ -123,6 +130,16 @@ public class PostController {
                 System.err.println("\tat " + element);
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar publicação: " + e.getMessage());
+        }
+    }
+
+    // Endpoint para validar senha antes de editar
+    @PostMapping("/{id}/validate-password")
+    public ResponseEntity<?> validatePassword(@PathVariable String id, @RequestBody PasswordRequest passwordRequest) {
+        if ("yagomelhordomundo".equals(passwordRequest.getPassword())) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Senha incorreta.");
         }
     }
 

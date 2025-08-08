@@ -23,6 +23,39 @@ const PostDetail = () => {
   const [deleteError, setDeleteError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editPassword, setEditPassword] = useState('');
+  const [editError, setEditError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditConfirm = async () => {
+    if (!editPassword.trim()) {
+      setEditError('Por favor, informe a senha.');
+      return;
+    }
+    setIsEditing(true);
+    setEditError(null);
+    try {
+      // Validar senha no backend antes de permitir edição
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}/validate-password`, {
+        password: editPassword,
+      });
+      setShowEditModal(false);
+      setEditPassword('');
+      setEditError(null);
+      // Redirecionar para página de edição (supondo que exista)
+      navigate(`/edit-post/${id}`);
+    } catch (err) {
+      if (err.response && err.response.status === 403) {
+        setEditError('Senha incorreta.');
+      } else {
+        setEditError('Erro ao validar a senha.');
+      }
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -148,7 +181,54 @@ const PostDetail = () => {
         <button className="delete-button" onClick={handleDeleteClick}>
           Excluir Publicação
         </button>
+        <button className="edit-button" onClick={() => setShowEditModal(true)}>
+          Editar Publicação
+        </button>
       </div>
+
+      {showDeleteModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Confirme a senha para excluir</h3>
+            <input
+              type="password"
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+              placeholder="Senha"
+              disabled={isDeleting}
+            />
+            {deleteError && <div className="error-message">{deleteError}</div>}
+            <div className="modal-actions">
+              <button onClick={handleDeleteCancel} disabled={isDeleting}>Cancelar</button>
+              <button onClick={handleDeleteConfirm} disabled={isDeleting}>
+                {isDeleting ? 'Excluindo...' : 'Confirmar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Confirme a senha para editar</h3>
+            <input
+              type="password"
+              value={editPassword}
+              onChange={(e) => setEditPassword(e.target.value)}
+              placeholder="Senha"
+              disabled={isEditing}
+            />
+            {editError && <div className="error-message">{editError}</div>}
+            <div className="modal-actions">
+              <button onClick={() => { setShowEditModal(false); setEditPassword(''); setEditError(null); }} disabled={isEditing}>Cancelar</button>
+              <button onClick={handleEditConfirm} disabled={isEditing}>
+                {isEditing ? 'Validando...' : 'Confirmar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <section className="comments-section">
         <h3>Comentários</h3>
