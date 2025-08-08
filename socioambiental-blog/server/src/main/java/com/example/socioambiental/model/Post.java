@@ -12,6 +12,8 @@ public class Post {
     private String title;
     private String content;
     private String imageFilename;  // Mantido para compatibilidade
+    private String imageUrl; // URL da imagem no Cloudinary
+    private String imagePublicId; // ID público da imagem no Cloudinary
     private List<String> imageFilenames; // Novo campo para múltiplas imagens
     private Date createdAt;
     private String author;
@@ -61,6 +63,22 @@ public class Post {
 
     public void setImageFilename(String imageFilename) {
         this.imageFilename = imageFilename;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImagePublicId() {
+        return imagePublicId;
+    }
+
+    public void setImagePublicId(String imagePublicId) {
+        this.imagePublicId = imagePublicId;
     }
 
     public List<String> getImageFilenames() {
