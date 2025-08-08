@@ -179,29 +179,41 @@ const PostDetail = () => {
       
       <div className="post-actions">
         <button className="delete-button" onClick={handleDeleteClick}>
-          Excluir Publicação
+          <span>🗑️</span>
+          Excluir
         </button>
         <button className="edit-button" onClick={() => setShowEditModal(true)}>
-          Editar Publicação
+          <span>✏️</span>
+          Editar
         </button>
       </div>
 
       {showDeleteModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Confirme a senha para excluir</h3>
-            <input
-              type="password"
-              value={deletePassword}
-              onChange={(e) => setDeletePassword(e.target.value)}
-              placeholder="Senha"
-              disabled={isDeleting}
-            />
-            {deleteError && <div className="error-message">{deleteError}</div>}
+        <div className="modal-overlay" onClick={handleDeleteCancel}>
+          <div className="modal-content enhanced-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>🔐 Confirmar Exclusão</h3>
+              <button className="modal-close" onClick={handleDeleteCancel}>×</button>
+            </div>
+            <div className="modal-body">
+              <p>Tem certeza que deseja excluir esta publicação?</p>
+              <p className="modal-warning">Esta ação não pode ser desfeita.</p>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                placeholder="Digite a senha de exclusão"
+                disabled={isDeleting}
+                className="modal-input"
+              />
+              {deleteError && <div className="error-message">{deleteError}</div>}
+            </div>
             <div className="modal-actions">
-              <button onClick={handleDeleteCancel} disabled={isDeleting}>Cancelar</button>
-              <button onClick={handleDeleteConfirm} disabled={isDeleting}>
-                {isDeleting ? 'Excluindo...' : 'Confirmar'}
+              <button className="cancel-button" onClick={handleDeleteCancel} disabled={isDeleting}>
+                Cancelar
+              </button>
+              <button className="delete-confirm-button" onClick={handleDeleteConfirm} disabled={isDeleting}>
+                {isDeleting ? 'Excluindo...' : 'Confirmar Exclusão'}
               </button>
             </div>
           </div>
@@ -209,21 +221,30 @@ const PostDetail = () => {
       )}
 
       {showEditModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Confirme a senha para editar</h3>
-            <input
-              type="password"
-              value={editPassword}
-              onChange={(e) => setEditPassword(e.target.value)}
-              placeholder="Senha"
-              disabled={isEditing}
-            />
-            {editError && <div className="error-message">{editError}</div>}
+        <div className="modal-overlay" onClick={() => { setShowEditModal(false); setEditPassword(''); setEditError(null); }}>
+          <div className="modal-content enhanced-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>🔐 Confirmar Edição</h3>
+              <button className="modal-close" onClick={() => { setShowEditModal(false); setEditPassword(''); setEditError(null); }}>×</button>
+            </div>
+            <div className="modal-body">
+              <p>Por favor, confirme sua senha para editar esta publicação.</p>
+              <input
+                type="password"
+                value={editPassword}
+                onChange={(e) => setEditPassword(e.target.value)}
+                placeholder="Digite a senha de edição"
+                disabled={isEditing}
+                className="modal-input"
+              />
+              {editError && <div className="error-message">{editError}</div>}
+            </div>
             <div className="modal-actions">
-              <button onClick={() => { setShowEditModal(false); setEditPassword(''); setEditError(null); }} disabled={isEditing}>Cancelar</button>
-              <button onClick={handleEditConfirm} disabled={isEditing}>
-                {isEditing ? 'Validando...' : 'Confirmar'}
+              <button className="cancel-button" onClick={() => { setShowEditModal(false); setEditPassword(''); setEditError(null); }} disabled={isEditing}>
+                Cancelar
+              </button>
+              <button className="edit-confirm-button" onClick={handleEditConfirm} disabled={isEditing}>
+                {isEditing ? 'Validando...' : 'Confirmar Edição'}
               </button>
             </div>
           </div>

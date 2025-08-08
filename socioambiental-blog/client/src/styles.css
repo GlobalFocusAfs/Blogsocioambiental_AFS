@@ -382,6 +382,10 @@ header.app-header p {
 .post-actions {
   margin: 25px 0;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .delete-button {
@@ -409,6 +413,33 @@ header.app-header p {
 .delete-button:active {
   transform: translateY(0);
   box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
+.edit-button {
+  background: linear-gradient(120deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.edit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.edit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
 }
 
 /* Modal */
@@ -997,5 +1028,136 @@ header.app-header p {
 .btn-primary:active {
   transform: translateY(0);
   box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+}
+
+/* Enhanced Modal Styles */
+.enhanced-modal {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+.enhanced-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.enhanced-modal .modal-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.enhanced-modal .modal-body {
+  padding: 30px;
+}
+
+.enhanced-modal .modal-body p {
+  color: #34495e;
+  font-size: 1.1rem;
+  margin: 0 0 15px 0;
+  text-align: center;
+}
+
+.enhanced-modal .modal-warning {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.enhanced-modal .modal-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-family: 'Open Sans', sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin: 15px 0;
+}
+
+.enhanced-modal .modal-input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+}
+
+.delete-confirm-button {
+  background: linear-gradient(120deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.delete-confirm-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.edit-confirm-button {
+  background: linear-gradient(120deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.edit-confirm-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+@media screen and (max-width: 768px) {
+  .enhanced-modal {
+    margin: 20px;
+    width: calc(100% - 40px);
+  }
+  
+  .enhanced-modal .modal-header {
+    padding: 20px 25px 15px;
+  }
+  
+  .enhanced-modal .modal-body {
+    padding: 25px;
+  }
+  
+  .enhanced-modal .modal-body p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .enhanced-modal .modal-header {
+    padding: 15px 20px 10px;
+  }
+  
+  .enhanced-modal .modal-body {
+    padding: 20px;
+  }
+  
+  .enhanced-modal .modal-body p {
+    font-size: 0.95rem;
+  }
 }
 
