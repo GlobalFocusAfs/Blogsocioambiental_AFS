@@ -14,15 +14,25 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cloudinary")
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+    origins = {"*"},
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+    allowedHeaders = {"*"},
+    allowCredentials = "true"
+)
 public class CloudinaryController {
 
     @Autowired
     private Cloudinary cloudinary;
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("file") MultipartFile file) {
         Map<String, String> response = new HashMap<>();
+        
+        if (file.isEmpty()) {
+            response.put("error", "Arquivo vazio");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
         
         try {
             // Fazer upload para Cloudinary
