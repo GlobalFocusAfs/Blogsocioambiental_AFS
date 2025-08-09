@@ -112,6 +112,8 @@ public class PostController {
             post.setTitle(postDetails.getTitle());
             post.setContent(postDetails.getContent());
             post.setImageFilename(postDetails.getImageFilename());
+            post.setImageUrl(postDetails.getImageUrl());
+            post.setImagePublicId(postDetails.getImagePublicId());
             post.setImageFilenames(postDetails.getImageFilenames());
             post.setAuthor(postDetails.getAuthor());
             // Atualizar data de expiração se fornecida

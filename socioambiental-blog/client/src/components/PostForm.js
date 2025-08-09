@@ -5,7 +5,8 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
   const [post, setPost] = useState({
     title: '',
     content: '',
-    imageFilename: '',
+    imageUrl: '',
+    imagePublicId: '',
     author: 'Anônimo',
     expirationDays: 0 // 0 = permanente
   });
@@ -19,12 +20,13 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
       setPost({
         title: initialPost.title || '',
         content: initialPost.content || '',
-        imageFilename: initialPost.imageFilename || '',
+        imageUrl: initialPost.imageUrl || '',
+        imagePublicId: initialPost.imagePublicId || '',
         author: initialPost.author || 'Anônimo',
         expirationDays: initialPost.expirationDays || 0
       });
-      if (initialPost.imageFilename) {
-        setPreviewImage(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/uploads/${initialPost.imageFilename}`);
+      if (initialPost.imageUrl) {
+        setPreviewImage(initialPost.imageUrl);
       }
     }
   }, [initialPost]);
@@ -32,7 +34,7 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) {
-      setPost({...post, imageFilename: ''});
+      setPost({...post, imageUrl: '', imagePublicId: ''});
       setPreviewImage(null);
       return;
     }
@@ -43,16 +45,18 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/upload`, formData);
-      setPost({...post, imageFilename: response.data.filename || response.data});
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/cloudinary/upload`, formData);
+      setPost({
+        ...post, 
+        imageUrl: response.data.url,
+        imagePublicId: response.data.publicId
+      });
       
-      const reader = new FileReader();
-      reader.onload = () => setPreviewImage(reader.result);
-      reader.readAsDataURL(file);
+      setPreviewImage(response.data.url);
     } catch (error) {
       console.error("Upload failed:", error);
       setErrorMessage("Erro ao enviar imagem. Tente novamente.");
-      setPost({...post, imageFilename: ''});
+      setPost({...post, imageUrl: '', imagePublicId: ''});
       setPreviewImage(null);
     } finally {
       setIsUploading(false);
