@@ -4,7 +4,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { ArrowLeft, ZoomIn, ZoomOut, X } from 'lucide-react';
-import { buildImageUrl, handleImageError } from '../utils/imageUrlUtils';
+import { buildImageUrl, handleImageError, getOptimizedImageUrl } from '../utils/imageUrlUtils';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -160,19 +160,19 @@ const PostDetail = () => {
       </div>
       {(post.imageUrl || post.imageFilename) && (
         <img
-          src={post.imageUrl ? post.imageUrl : buildImageUrl(post.imageFilename)}
+          src={getOptimizedImageUrl(post.imageUrl || buildImageUrl(post.imageFilename), 800, 400)}
           alt={post.title}
           className="post-image"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', maxWidth: '100%', height: 'auto' }}
           title="Clique para ver a imagem completa"
           onClick={() => {
             window.open(
-              post.imageUrl ? post.imageUrl : buildImageUrl(post.imageFilename),
+              post.imageUrl || buildImageUrl(post.imageFilename),
               '_blank',
               'noopener,noreferrer'
             );
           }}
-          onError={(e) => handleImageError(e, post.imageUrl ? post.imageUrl : buildImageUrl(post.imageFilename))}
+          onError={(e) => handleImageError(e)}
         />
       )}
       <p className="post-content">{post.content}</p>

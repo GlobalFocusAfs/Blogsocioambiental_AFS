@@ -3,6 +3,7 @@
  */
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://blogsocioambiental-afs-1.onrender.com';
+const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com';
 
 /**
  * Gera URL completa para imagem nas pré-visualizações
@@ -12,9 +13,25 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://blogsocioambienta
 export const getPreviewImageUrl = (imagePath) => {
   if (!imagePath) return '';
   
+  // Se já for uma URL do Cloudinary, retorna como está
+  if (imagePath.includes('cloudinary.com')) {
+    return imagePath;
+  }
+  
   // Se já for uma URL completa (http ou https), retorna como está
   if (imagePath.startsWith('http')) {
     return imagePath;
+  }
+  
+  // Se for uma URL relativa antiga do sistema local, converte para Cloudinary
+  if (imagePath.startsWith('/uploads/')) {
+    const filename = imagePath.replace('/uploads/', '');
+    return `${CLOUDINARY_BASE_URL}/drlf6gxc1/image/upload/socioambiental-blog/${filename}`;
+  }
+  
+  // Se for apenas o nome do arquivo, monta a URL do Cloudinary
+  if (imagePath && !imagePath.includes('/')) {
+    return `${CLOUDINARY_BASE_URL}/drlf6gxc1/image/upload/socioambiental-blog/${imagePath}`;
   }
   
   // Se for uma URL relativa, converte para URL absoluta
@@ -22,8 +39,8 @@ export const getPreviewImageUrl = (imagePath) => {
     return `${API_BASE_URL}${imagePath}`;
   }
   
-  // Se for apenas o nome do arquivo, monta a URL completa
-  return `${API_BASE_URL}/uploads/${imagePath}`;
+  // Caso padrão - usar Cloudinary
+  return `${CLOUDINARY_BASE_URL}/drlf6gxc1/image/upload/socioambiental-blog/${imagePath}`;
 };
 
 /**
@@ -71,4 +88,43 @@ export const handleImageError = (event, fallbackUrl = null) => {
     event.target.src = getImagePlaceholder();
   }
   event.target.onerror = null; // Previne loop infinito
+};
+
+/**
+ * Extrai o public_id do Cloudinary da URL
+ * @param {string} cloudinaryUrl - URL completa do Cloudinary
+ * @returns {string} public_id da imagem
+ */
+export const extractPublicId = (cloudinaryUrl) => {
+  if (!cloudinaryUrl || !cloudinaryUrl.includes('cloudinary.com')) {
+    return null;
+  }
+  
+  const parts = cloudinaryUrl.split('/');
+  const filename = parts[parts.length - 1];
+  return filename.split('.')[0]; // Remove extensão
+};
+
+/**
+ * Gera URL otimizada para diferentes tamanhos
+ * @param {string} imageUrl - URL original do Cloudinary
+ * @param {number} width - largura desejada
+ * @param {number} height - altura desejada
+ * @returns {string} URL otimizada
+ */
+export const getOptimizedImageUrl = (imageUrl, width = null, height = null) => {
+  if (!imageUrl || !imageUrl.includes('cloudinary.com')) {
+    return imageUrl;
+  }
+  
+  let transformation = '';
+  if (width && height) {
+    transformation = `w_${width},h_${height},c_fill`;
+  } else if (width) {
+    transformation = `w_${width},c_scale`;
+  } else if (height) {
+    transformation = `h_${height},c_scale`;
+  }
+  
+  return imageUrl.replace('/upload/', `/upload/${transformation}/`);
 };
