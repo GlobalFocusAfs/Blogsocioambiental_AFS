@@ -32,4 +32,5 @@ public class UnifiedCorsConfig {
         source.registerCorsConfiguration("/**", configuration);
         
         return source;
+    }
 }
