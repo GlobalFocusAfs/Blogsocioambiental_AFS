@@ -14,11 +14,8 @@ public class CorsFilter implements Filter {
         
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         
-        // Allow all origins for now (you can restrict this later)
-        httpResponse.setHeader("Access-Control-Allow-Origin", "https://blogsocioambiental-afs-1itd.vercel.app");
-        httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        // CORS configuration handled by GlobalCorsConfig
+        // This filter is now disabled to prevent conflicts
         
         chain.doFilter(request, response);
     }

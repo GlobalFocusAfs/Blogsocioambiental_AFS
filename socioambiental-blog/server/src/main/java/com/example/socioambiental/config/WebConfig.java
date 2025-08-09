@@ -7,17 +7,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    // CORS configuration moved to GlobalCorsConfig to avoid conflicts
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns(
-                    "http://localhost:3000",
-                    "https://blogsocioambiental-afs-1.onrender.com",
-                    "https://blogsocioambiental-afs.vercel.app",
-                    "https://blogsocioambiental-afs-1itd.vercel.app"
-                )
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+        // Disabled to prevent CORS conflicts - use GlobalCorsConfig instead
     }
 }
