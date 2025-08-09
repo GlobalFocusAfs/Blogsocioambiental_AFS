@@ -20,7 +20,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/system")
-@CrossOrigin(origins = "*")
 public class SystemController {
 
     @Autowired
