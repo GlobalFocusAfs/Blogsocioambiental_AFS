@@ -1,4 +1,4 @@
-package com.example.socioambiental.config;
+zpackage com.example.socioambiental.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,10 +11,19 @@ import java.util.Arrays;
 @Configuration
 public class CloudinaryCorsConfig {
 
-    // CORS configuration moved to GlobalCorsConfig to avoid conflicts
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // Disabled to prevent CORS conflicts - use GlobalCorsConfig instead
-        return null;
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/api/cloudinary/**", configuration);
+        
+        return source;
     }
 }
