@@ -7,9 +7,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    // CORS configuration moved to GlobalCorsConfig to avoid conflicts
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // Disabled to prevent CORS conflicts - use GlobalCorsConfig instead
+        registry.addMapping("/**")
+                .allowedOrigins(
+                    "http://localhost:3000",
+                    "http://localhost:3001",
+                    "https://blogsocioambiental-afs-1.onrender.com",
+                    "https://blogsocioambiental-afs.vercel.app",
+                    "https://blogsocioambiental-afs-1itd.vercel.app",
+                    "https://*.vercel.app"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }
