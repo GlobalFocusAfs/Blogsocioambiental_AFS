@@ -158,21 +158,21 @@ const PostDetail = () => {
       <div className="post-meta">
         Por {post.author || 'Anônimo'} • {format(new Date(post.createdAt), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
       </div>
-      {post.imageFilename && (
+      {(post.imageUrl || post.imageFilename) && (
         <img
-          src={buildImageUrl(post.imageFilename)}
+          src={post.imageUrl ? post.imageUrl : buildImageUrl(post.imageFilename)}
           alt={post.title}
           className="post-image"
           style={{ cursor: 'pointer' }}
           title="Clique para ver a imagem completa"
           onClick={() => {
             window.open(
-              buildImageUrl(post.imageFilename),
+              post.imageUrl ? post.imageUrl : buildImageUrl(post.imageFilename),
               '_blank',
               'noopener,noreferrer'
             );
           }}
-          onError={(e) => handleImageError(e, buildImageUrl(post.imageFilename))}
+          onError={(e) => handleImageError(e, post.imageUrl ? post.imageUrl : buildImageUrl(post.imageFilename))}
         />
       )}
       <p className="post-content">{post.content}</p>
