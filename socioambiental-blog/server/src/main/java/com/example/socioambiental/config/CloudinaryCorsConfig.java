@@ -1,4 +1,4 @@
-zpackage com.example.socioambiental.config;
+package com.example.socioambiental.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
