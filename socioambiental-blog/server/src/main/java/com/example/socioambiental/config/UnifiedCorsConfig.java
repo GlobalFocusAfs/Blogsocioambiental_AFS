@@ -11,7 +11,7 @@ import java.util.Arrays;
 @Configuration
 public class UnifiedCorsConfig {
 
-    @Bean
+    @Bean("unifiedCorsConfigurationSource")
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
