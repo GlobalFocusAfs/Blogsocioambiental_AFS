@@ -10,7 +10,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
-@Primary
 public class UnifiedCorsConfig {
 
     @Bean
@@ -18,7 +17,7 @@ public class UnifiedCorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Comprehensive list of allowed origins including all Vercel deployments
+        // Updated to include all possible frontend URLs - including the specific Vercel URL
         configuration.setAllowedOriginPatterns(Arrays.asList(
             "http://localhost:3000",
             "http://localhost:3001",
@@ -27,14 +26,10 @@ public class UnifiedCorsConfig {
             "https://blogsocioambiental-8glhfzqmj-globalfocusafs-projects.vercel.app",
             "https://*.vercel.app",
             "https://*.onrender.com",
-            "https://blogsocioambiental-afs-1.onrender.com",
-            "https://blogsocioambiental-afs-*.onrender.com"
+            "https://blogsocioambiental-afs-1.onrender.com"
         ));
         
-        configuration.setAllowedMethods(Arrays.asList(
-            "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"
-        ));
-        
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
             "Authorization",
             "Content-Type",
@@ -43,19 +38,14 @@ public class UnifiedCorsConfig {
             "X-Requested-With",
             "Access-Control-Request-Method",
             "Access-Control-Request-Headers",
-            "Cache-Control",
-            "X-Auth-Token",
-            "X-Requested-With"
+            "Cache-Control"
         ));
-        
         configuration.setExposedHeaders(Arrays.asList(
             "Access-Control-Allow-Origin",
             "Access-Control-Allow-Credentials",
             "Access-Control-Allow-Methods",
-            "Access-Control-Allow-Headers",
-            "Content-Disposition"
+            "Access-Control-Allow-Headers"
         ));
-        
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
         
