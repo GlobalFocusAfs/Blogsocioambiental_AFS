@@ -5,6 +5,7 @@ import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import keepAliveService from './utils/keepAlive';
+import API_CONFIG from './utils/apiConfig';
 import './styles.css';
 
 function App() {
@@ -32,13 +33,34 @@ function App() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts`);
-      // O backend já retorna os posts ordenados, então não precisa ordenar no frontend
+      const response = await axios.get(`${API_CONFIG.getBaseUrl()}/posts`, {
+        timeout: 10000, // 10 second timeout
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
       setPosts(response.data);
       setError(null);
     } catch (error) {
       console.error('Error fetching posts:', error);
-      setError('Erro ao carregar as publicações. Tente novamente mais tarde.');
+      
+      // More detailed error handling
+      let errorMessage = 'Erro ao carregar as publicações. ';
+      
+      if (error.code === 'ECONNABORTED') {
+        errorMessage += 'A conexão está lenta. Tente novamente.';
+      } else if (error.response) {
+        // Server responded with error status
+        errorMessage += `Erro do servidor: ${error.response.status}`;
+      } else if (error.request) {
+        // Request was made but no response
+        errorMessage += 'Servidor não está respondendo. Verifique sua conexão.';
+      } else {
+        // Something else happened
+        errorMessage += 'Erro de configuração. Contate o suporte.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
