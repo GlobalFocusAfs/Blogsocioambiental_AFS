@@ -1,245 +1,114 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import PostList from './components/PostList';
-import PostFormCloudinary from './components/PostFormCloudinary';
+import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import PostEditForm from './components/PostEditForm';
-import keepAliveService from './utils/keepAlive';
-import API_CONFIG from './utils/apiConfig';
-import './styles.css';
+import { API_BASE_URL } from './utils/apiConfig';
+import './styles-sophisticated.css';
+import './styles-professional.css';
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchPosts();
-    
-    // Iniciar serviço de keep-alive apenas em produção
-    if (process.env.NODE_ENV === 'production') {
-      keepAliveService.start();
-    }
-
-    // Limpar quando o componente desmontar
-    return () => {
-      if (process.env.NODE_ENV === 'production') {
-        keepAliveService.stop();
-      }
-    };
   }, []);
 
-  const fetchPosts = async (retryCount = 0) => {
+  const fetchPosts = async () => {
     try {
-      setIsLoading(true);
-      const response = await axios.get(`${API_CONFIG.getBaseUrl()}/posts`, {
-        timeout: 70000, // Increased to 70 seconds for security
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      setPosts(response.data);
-      setError(null);
+      const response = await fetch(`${API_BASE_URL}/api/posts`);
+      const data = await response.json();
+      setPosts(data);
+      setLoading(false);
     } catch (error) {
-      console.error('Error fetching posts:', error);
-      
-      // Retry logic with exponential backoff
-      if (error.code === 'ECONNABORTED' && retryCount < 2) {
-        console.log(`Retrying fetch posts... attempt ${retryCount + 1}`);
-        setTimeout(() => fetchPosts(retryCount + 1), (retryCount + 1) * 2000);
-        return;
+      console.error('Erro ao buscar posts:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Tem certeza que deseja deletar este post?')) {
+      try {
+        await fetch(`${API_BASE_URL}/api/posts/${id}`, {
+          method: 'DELETE',
+        });
+        fetchPosts();
+      } catch (error) {
+        console.error('Erro ao deletar post:', error);
       }
-      
-      // More detailed error handling
-      let errorMessage = 'Erro ao carregar as publicações. ';
-      
-      if (error.code === 'ECONNABORTED') {
-        errorMessage += 'O servidor está demorando para responder. Tente novamente em alguns segundos.';
-      } else if (error.response) {
-        errorMessage += `Erro do servidor: ${error.response.status}`;
-      } else if (error.request) {
-        errorMessage += 'Servidor não está respondendo. Verifique sua conexão.';
-      } else {
-        errorMessage += 'Erro de configuração. Contate o suporte.';
-      }
-      
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleNewPost = async (post) => {
-    try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts`, post);
-      fetchPosts(); // Atualiza a lista após criar novo post
-      setShowModal(false); // Fecha o modal
-    } catch (error) {
-      console.error('Error creating post:', error);
-      setError('Erro ao criar a publicação. Verifique os dados e tente novamente.');
-    }
-  };
-
-  const handleUpdatePost = async (postId, updatedPost) => {
-    try {
-      await axios.put(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${postId}`, updatedPost);
-      fetchPosts(); // Atualiza a lista após atualizar o post
-    } catch (error) {
-      console.error('Error updating post:', error);
-      setError('Erro ao atualizar a publicação. Verifique os dados e tente novamente.');
-    }
-  };
-
-  const handleDeletePost = async (postId) => {
-    try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${postId}`);
-      fetchPosts(); // Atualiza a lista após deletar
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      setError('Erro ao excluir a publicação.');
     }
   };
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <h1>Blog de Responsabilidade Socioambiental</h1>
-        <p>Compartilhe ideias e ações para um mundo melhor</p>
-      </header>
+    <Router>
+      <div className="app-container">
+        <header className="blog-header">
+          <h1 className="blog-title">Blog Socioambiental</h1>
+          <p className="blog-subtitle">Explorando questões ambientais e sustentabilidade</p>
+        </header>
 
-      <main className="app-main">
-        <Routes>
-          <Route path="/" element={
-            <>
-              {error && <div className="error-message">{error}</div>}
+        <nav style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          gap: '2rem', 
+          marginBottom: '2rem',
+          padding: '1rem',
+          backgroundColor: '#f8fafc',
+          borderRadius: '0.75rem'
+        }}>
+          <Link to="/" style={{ 
+            color: '#2563eb', 
+            textDecoration: 'none', 
+            fontWeight: '600',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.375rem',
+            transition: 'background-color 0.2s'
+          }}>Home</Link>
+          <Link to="/new" style={{ 
+            color: '#2563eb', 
+            textDecoration: 'none', 
+            fontWeight: '600',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.375rem',
+            transition: 'background-color 0.2s'
+          }}>Novo Post</Link>
+        </nav>
 
-              {isLoading ? (
-                <div className="loading">Carregando publicações...</div>
-              ) : (
-                <>
-                  <h2 className="section-title">Últimas Publicações</h2>
-                  {posts.length === 0 ? (
-                    <p className="no-posts">Nenhuma publicação encontrada. Seja o primeiro a compartilhar!</p>
-                  ) : (
-                    <PostList 
-                      posts={posts} 
-                      onDelete={handleDeletePost} 
-                    />
-                  )}
-                  <div style={{textAlign: 'center', marginTop: '40px'}}>
-                    <button 
-                      className="btn btn-primary" 
-                      onClick={() => setShowModal(true)}
-                    >
-                      📝 Criar Nova Publicação
-                    </button>
-                  </div>
-                </>
-              )}
-
-              {showModal && (
-                <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                    <div className="modal-header">
-                      <h2>Criar Nova Publicação</h2>
-                      <button 
-                        className="modal-close" 
-                        onClick={() => setShowModal(false)}
-                      >
-                        ×
-                      </button>
-                    </div>
-                    <div style={{padding: '20px 30px 30px 30px'}}>
-                      <PostFormCloudinary 
-                        onSubmit={handleNewPost} 
-                        onCancel={() => setShowModal(false)}
-                      />
-                    </div>
+        <main>
+          {loading ? (
+            <div className="posts-grid">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="skeleton-card">
+                  <div className="skeleton-image"></div>
+                  <div style={{ padding: '1.5rem' }}>
+                    <div style={{ 
+                      height: '1.5rem', 
+                      background: 'linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%)',
+                      borderRadius: '0.25rem',
+                      marginBottom: '1rem'
+                    }}></div>
+                    <div style={{ 
+                      height: '1rem', 
+                      background: 'linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%)',
+                      borderRadius: '0.25rem'
+                    }}></div>
                   </div>
                 </div>
-              )}
-            </>
-          } />
-          <Route path="/post/:id" element={<PostDetail />} />
-          <Route path="/post/:id/edit" element={
-            <EditPostWrapper 
-              onUpdate={handleUpdatePost} 
-            />
-          } />
-        </Routes>
-      </main>
-
-      <footer className="app-footer">
-        <p>© {new Date().getFullYear()} Blog Socioambiental - Todos os direitos reservados</p>
-      </footer>
-    </div>
-  );
-}
-
-/* Estilos para o footer */
-const footerStyle = {
-  backgroundColor: '#1b5e20',
-  color: 'white',
-  textAlign: 'center',
-  padding: '20px',
-  marginTop: 'auto',
-  fontSize: '0.9rem'
-};
-
-const AppFooter = () => (
-  <footer style={footerStyle}>
-    <p>© {new Date().getFullYear()} Blog Socioambiental - Todos os direitos reservados</p>
-  </footer>
-);
-
-function EditPostWrapper({ onUpdate }) {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [post, setPost] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-
-  React.useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}`);
-        setPost(response.data);
-        setError(null);
-      } catch (err) {
-        setError('Erro ao carregar a publicação para edição.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPost();
-  }, [id]);
-
-  const handleSubmit = async (updatedPost) => {
-    await onUpdate(id, updatedPost);
-    navigate(`/post/${id}`);
-  };
-
-  if (loading) {
-    return <div className="loading">Carregando publicação para edição...</div>;
-  }
-
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
-  if (!post) {
-    return <div className="error-message">Publicação não encontrada.</div>;
-  }
-
-  return (
-    <PostEditForm 
-      post={post} 
-      onSubmit={handleSubmit} 
-      onCancel={() => navigate(`/post/${id}`)} 
-    />
+              ))}
+            </div>
+          ) : (
+            <Routes>
+              <Route path="/" element={<PostList posts={posts} onDelete={handleDelete} />} />
+              <Route path="/new" element={<PostForm onPostCreated={fetchPosts} />} />
+              <Route path="/post/:id" element={<PostDetail />} />
+              <Route path="/edit/:id" element={<PostEditForm onPostUpdated={fetchPosts} />} />
+            </Routes>
+          )}
+        </main>
+      </div>
+    </Router>
   );
 }
 

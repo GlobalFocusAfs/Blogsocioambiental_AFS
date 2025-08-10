@@ -3,7 +3,7 @@ import PostItem from './PostItem';
 
 const PostList = ({ posts, onDelete }) => {
   return (
-    <div className="posts-container">
+    <div className="posts-grid">
       {posts.map(post => (
         <PostItem key={post.id} post={post} onDelete={onDelete} />
       ))}
@@ -12,4 +12,3 @@ const PostList = ({ posts, onDelete }) => {
 };
 
 export default PostList;
-
