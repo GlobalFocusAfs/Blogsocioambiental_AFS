@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import PostList from './components/PostList';
-import PostForm from './components/PostForm';
+import PostFormCloudinary from './components/PostFormCloudinary';
 import PostDetail from './components/PostDetail';
 import keepAliveService from './utils/keepAlive';
 import API_CONFIG from './utils/apiConfig';
