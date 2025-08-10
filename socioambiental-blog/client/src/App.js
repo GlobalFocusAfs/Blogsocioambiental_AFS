@@ -35,7 +35,7 @@ function App() {
     try {
       setIsLoading(true);
       const response = await axios.get(`${API_CONFIG.getBaseUrl()}/posts`, {
-        timeout: 30000, // Increased to 30 seconds for production
+        timeout: 70000, // Increased to 70 seconds for security
         headers: {
           'Content-Type': 'application/json',
         }
