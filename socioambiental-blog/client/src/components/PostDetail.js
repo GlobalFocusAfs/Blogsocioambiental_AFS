@@ -33,24 +33,33 @@ const PostDetail = () => {
       setEditError('Por favor, informe a senha.');
       return;
     }
+    
     setIsEditing(true);
     setEditError(null);
+    
     try {
-      // Validar senha no backend antes de permitir edição
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}/validate-password`, {
-        password: editPassword,
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/posts/${id}/validate-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: editPassword }),
       });
-      setShowEditModal(false);
-      setEditPassword('');
-      setEditError(null);
-      // Redirecionar para página de edição (supondo que exista)
-      navigate(`/edit-post/${id}`);
-    } catch (err) {
-      if (err.response && err.response.status === 403) {
+
+      if (response.ok) {
+        // Password is correct, navigate to edit page
+        setShowEditModal(false);
+        setEditPassword('');
+        setEditError(null);
+        navigate(`/edit-post/${id}`);
+      } else if (response.status === 403) {
         setEditError('Senha incorreta.');
       } else {
         setEditError('Erro ao validar a senha.');
       }
+    } catch (err) {
+      console.error('Error validating password:', err);
+      setEditError('Erro de conexão. Tente novamente.');
     } finally {
       setIsEditing(false);
     }
