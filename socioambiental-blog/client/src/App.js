@@ -30,11 +30,11 @@ function App() {
     };
   }, []);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (retryCount = 0) => {
     try {
       setIsLoading(true);
       const response = await axios.get(`${API_CONFIG.getBaseUrl()}/posts`, {
-        timeout: 10000, // 10 second timeout
+        timeout: 30000, // Increased to 30 seconds for production
         headers: {
           'Content-Type': 'application/json',
         }
@@ -44,19 +44,23 @@ function App() {
     } catch (error) {
       console.error('Error fetching posts:', error);
       
+      // Retry logic with exponential backoff
+      if (error.code === 'ECONNABORTED' && retryCount < 2) {
+        console.log(`Retrying fetch posts... attempt ${retryCount + 1}`);
+        setTimeout(() => fetchPosts(retryCount + 1), (retryCount + 1) * 2000);
+        return;
+      }
+      
       // More detailed error handling
       let errorMessage = 'Erro ao carregar as publicações. ';
       
       if (error.code === 'ECONNABORTED') {
-        errorMessage += 'A conexão está lenta. Tente novamente.';
+        errorMessage += 'O servidor está demorando para responder. Tente novamente em alguns segundos.';
       } else if (error.response) {
-        // Server responded with error status
         errorMessage += `Erro do servidor: ${error.response.status}`;
       } else if (error.request) {
-        // Request was made but no response
         errorMessage += 'Servidor não está respondendo. Verifique sua conexão.';
       } else {
-        // Something else happened
         errorMessage += 'Erro de configuração. Contate o suporte.';
       }
       
