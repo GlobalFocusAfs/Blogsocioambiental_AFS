@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import PostList from './components/PostList';
-import PostForm from './components/PostForm';
 import PostDetail from './components/PostDetail';
 import PostEditForm from './components/PostEditForm';
+import ModalPostForm from './components/ModalPostForm';
 import { API_BASE_URL } from './utils/apiConfig';
 import './styles-sophisticated.css';
 import './styles-professional.css';
