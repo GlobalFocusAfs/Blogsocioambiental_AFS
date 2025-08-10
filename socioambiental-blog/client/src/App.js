@@ -4,6 +4,7 @@ import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import PostList from './components/PostList';
 import PostFormCloudinary from './components/PostFormCloudinary';
 import PostDetail from './components/PostDetail';
+import PostEditForm from './components/PostEditForm';
 import keepAliveService from './utils/keepAlive';
 import API_CONFIG from './utils/apiConfig';
 import './styles.css';
@@ -234,7 +235,7 @@ function EditPostWrapper({ onUpdate }) {
   }
 
   return (
-    <PostForm 
+    <PostEditForm 
       post={post} 
       onSubmit={handleSubmit} 
       onCancel={() => navigate(`/post/${id}`)} 
