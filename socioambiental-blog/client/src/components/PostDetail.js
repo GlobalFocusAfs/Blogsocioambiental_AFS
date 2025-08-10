@@ -51,7 +51,7 @@ const PostDetail = () => {
         setShowEditModal(false);
         setEditPassword('');
         setEditError(null);
-        navigate(`/edit-post/${id}`);
+              navigate(`/post/${id}/edit`);
       } else if (response.status === 403) {
         setEditError('Senha incorreta.');
       } else {
