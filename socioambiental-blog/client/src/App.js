@@ -18,7 +18,7 @@ function App() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/posts`);
+      const response = await fetch(`${API_BASE_URL}/posts`);
       const data = await response.json();
       setPosts(data);
       setLoading(false);
