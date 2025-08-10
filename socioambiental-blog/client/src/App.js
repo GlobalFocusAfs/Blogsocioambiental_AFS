@@ -31,7 +31,7 @@ function App() {
   const handleDelete = async (id) => {
     if (window.confirm('Tem certeza que deseja deletar este post?')) {
       try {
-        await fetch(`${API_BASE_URL}/api/posts/${id}`, {
+        await fetch(`${API_BASE_URL}/posts/${id}?password=yagomelhordomundo`, {
           method: 'DELETE',
         });
         fetchPosts();

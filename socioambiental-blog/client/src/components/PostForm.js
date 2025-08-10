@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/apiConfig';
 
 function PostForm({ post: initialPost, onSubmit, onCancel }) {
   const [post, setPost] = useState({
@@ -45,7 +46,7 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL || 'https://blogsocioambiental-afs-1.onrender.com'}/api/cloudinary/upload`, formData);
+      const response = await axios.post(`${API_BASE_URL}/cloudinary/upload`, formData);
       setPost({
         ...post, 
         imageUrl: response.data.url,
