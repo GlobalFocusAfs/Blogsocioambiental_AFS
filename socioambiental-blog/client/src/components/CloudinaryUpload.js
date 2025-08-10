@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_CONFIG from '../utils/apiConfig';
 
 const CloudinaryUpload = ({ onImageUploaded, onImageRemoved, currentImageUrl }) => {
     const [uploading, setUploading] = useState(false);
@@ -16,7 +17,7 @@ const CloudinaryUpload = ({ onImageUploaded, onImageRemoved, currentImageUrl }) 
         formData.append('file', file);
 
         try {
-            const response = await axios.post('/api/cloudinary/upload', formData, {
+            const response = await axios.post(`${API_CONFIG.getBaseUrl()}/api/cloudinary/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
