@@ -147,7 +147,7 @@ function App() {
                       </button>
                     </div>
                     <div style={{padding: '20px 30px 30px 30px'}}>
-                      <PostForm 
+                      <PostFormCloudinary 
                         onSubmit={handleNewPost} 
                         onCancel={() => setShowModal(false)}
                       />
