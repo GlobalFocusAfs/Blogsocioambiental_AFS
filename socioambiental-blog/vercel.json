@@ -11,26 +11,28 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
+      "dest": "https://blogsocioambiental-afs.vercel.app/api/$1"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/client/build/static/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
       "dest": "/client/build/$1"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "https://blogsocioambiental-afs.vercel.app/api/$1"
+      "src": "/(.*)",
+      "dest": "/client/build/index.html"
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://blogsocioambiental-afs.vercel.app"
+    "REACT_APP_API_URL": "https://blogsocioambiental-afs.vercel.app",
+    "GENERATE_SOURCEMAP": "false",
+    "CI": "false"
   },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ]
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "client/build",
+  "installCommand": "cd client && npm install"
 }
