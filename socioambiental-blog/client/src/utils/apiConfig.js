@@ -12,4 +12,7 @@ const API_CONFIG = {
   }
 };
 
+// Export the base URL as a named export for convenience
+export const API_BASE_URL = API_CONFIG.getBaseUrl();
+
 export default API_CONFIG;
