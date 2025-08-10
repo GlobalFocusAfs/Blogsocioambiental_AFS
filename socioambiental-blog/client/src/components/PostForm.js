@@ -46,7 +46,7 @@ function PostForm({ post: initialPost, onSubmit, onCancel }) {
     formData.append('file', file);
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/cloudinary/upload`, formData);
+      const response = await axios.post(`${API_BASE_URL}/api/cloudinary/upload`, formData);
       setPost({
         ...post, 
         imageUrl: response.data.url,
